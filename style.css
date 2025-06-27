@@ -1,3 +1,19 @@
+
+
+[data-theme="light"]{
+  --primary-color: rgb(99, 176, 221);
+  --secondary-color: rgb(80, 151, 192);
+  --tertiary-color: rgb(174, 224, 255);
+  --blur: rgba(0, 0, 0, 0.205);
+}
+
+[data-theme="dark"] {
+  --blur: rgba(255, 255, 255, 0.075);
+  --primary-color: rgb(25, 45, 57);
+  --secondary-color: rgb(9, 31, 43);
+  --tertiary-color: rgb(10, 22, 30);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,12 +28,12 @@ html {
 body {
   width: 100vw;
   height: 100vh;
-  background: #006ead;
+  background: var(--primary-color);
   background: linear-gradient(
     to right bottom,
-    rgb(72, 127, 159) 0%,
-    rgb(51, 119, 158) 54%,
-    rgb(174, 224, 255) 100%
+    var(--primary-color) 0%,
+    var(--secondary-color) 54%,
+    var(--tertiary-color) 100%
   );
   background-size: cover;
   background-repeat: no-repeat;
@@ -28,13 +44,23 @@ body {
   color: #fff;
 }
 
+body.dark {
+  background: #006ead;
+  background: linear-gradient(
+    to right bottom,
+    var(--primary-color) 0%,
+    var(--secondary-color) 54%,
+    var(--tertiary-color) 100%
+  );
+}
+
 section {
   width: 100%;
   height: 30rem;
   box-shadow: inset 0px 0px 30px #ffffff27;
   border: 1px solid rgba(255, 255, 255, 0.21);
   backdrop-filter: blur(100%);
-  background-color: rgba(0, 0, 0, 0.135);
+  background-color: var(--blur);
   border-radius: 9px;
   font-size: 1.2rem;
 }
@@ -43,7 +69,7 @@ section {
   box-shadow: inset 0px 0px 30px #ffffff27;
   border: 1px solid rgba(255, 255, 255, 0.21);
   backdrop-filter: blur(100%);
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: var(--blur);
   border-radius: 9px;
   padding: 1.6rem;
 }
@@ -63,6 +89,7 @@ section {
   grid-row: span 2;
   display: flex;
   justify-content: center;
+  padding: 1.2rem 0;
 }
 
 .forecast {
@@ -108,7 +135,7 @@ section {
   width: 80%;
   display: flex;
   flex-direction: column;
-  gap: 2.4rem;
+  gap: 3.2rem;
 }
 
 .star {
@@ -147,8 +174,6 @@ section {
   font-size: 4rem;
   display: inline-block;
   transform: translateY(-1.6rem);
-}
-.temperature-condition {
 }
 
 .condition-icon {
