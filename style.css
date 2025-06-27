@@ -6,7 +6,7 @@
 }
 
 [data-theme="dark"] {
-  --blur: rgba(255, 255, 255, 0.075);
+  --blur: #ffffff1b;
   --primary-color: rgb(25, 45, 57);
   --secondary-color: rgb(9, 31, 43);
   --tertiary-color: rgb(10, 22, 30);
@@ -294,6 +294,10 @@ input:checked + .slider:before {
   background: #5c7285;
 }
 
+.hour {
+  font-weight: 700;
+}
+
 .hourly-img {
   width: 1.6rem;
   height: 1.6rem;
@@ -302,6 +306,7 @@ input:checked + .slider:before {
 .hours-forecast {
   max-width: 37.7rem;
   position: relative;
+  scroll-behavior: smooth;
 }
 
 .forecast-list {
@@ -313,6 +318,7 @@ input:checked + .slider:before {
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 
 .hourly-forecast {
@@ -352,4 +358,22 @@ input:checked + .slider:before {
   top: 50%;
   right: 0;
   transform: translate(3rem, -50%);
+}
+
+.sunrise-sunset-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.sunrise,
+.sunset {
+  width: 16rem;
+  padding: 1.6rem 0;
+  text-align: center;
+}
+
+.sun-title {
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
