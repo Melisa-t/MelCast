@@ -30,8 +30,6 @@ const changeRightList = function () {
   document.querySelector(`.forecast-list`).scrollLeft += hourlyGap;
 };
 
-console.log();
-
 const changeLeftList = function () {
   document.querySelector(`.forecast-list`).scrollLeft -= hourlyGap;
 };
