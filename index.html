@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MelCast</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <div class="container app-grid">
+      <section class="current-weather">
+        <div class="content">
+          <input class="search-box" type="text" placeholder="Search.." />
+          <div class="location-container">
+            <div class="location-box">
+              <ion-icon class="location-img" name="location-outline"></ion-icon>
+              <span>
+                <p class="city-country-location">City, Country</p>
+                <p class="date">Date</p>
+              </span>
+            </div>
+            <ion-icon class="star" name="star-outline"></ion-icon>
+            <!-- <ion-icon name="star"></ion-icon> -->
+          </div>
+          <div class="weather-container">
+            <img
+              src="https://img.icons8.com/?size=100&id=C1TelaAFdrrO&format=png&color=000000"
+              alt=""
+              class="weather-logo"
+            />
+            <p class="temperature">
+              <span class="temperature-degree">24</span
+              ><span class="temperature-unit">°C</span>
+            </p>
+            <p class="temperature-condition">Sunny</p>
+          </div>
+          <div class="weather-conditions blur-border">
+            <div class="wind-condition">
+              <img
+                class="condition-icon"
+                src="https://img.icons8.com/?size=100&id=pLiaaoa41R9n&format=png&color=000000"
+                alt=""
+              />
+              <p><span class="wind">6</span> km/h</p>
+            </div>
+            <div class="precipitation-condition">
+              <img
+                class="condition-icon"
+                src="https://img.icons8.com/?size=100&id=15362&format=png&color=000000"
+                alt=""
+              />
+              <p><span class="precipitation">12</span>%</p>
+            </div>
+            <div class="uv-condition">
+              <img
+                class="condition-icon"
+                src="https://img.icons8.com/?size=100&id=oVhznwPN2V1v&format=png&color=000000"
+                alt=""
+              />
+              <p><span class="uv-index">10</span></p>
+            </div>
+            <div class="feels-minmax">
+              <p>Feels like: <span class="feels-like">35</span> °C</p>
+              <p>
+                <span class="min-temp">12</span> °C /
+                <span class="max-temp">40</span> °C
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="map"></section>
+      <section class="highlighted-cities"></section>
+      <section class="forecast"></section>
+    </div>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
