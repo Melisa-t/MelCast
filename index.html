@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css" />
     <script defer src="script.js"></script>
   </head>
-  <body >
+  <body>
     <div class="container app-grid">
       <section class="current-weather">
         <div class="content">
@@ -68,9 +68,7 @@
               </p>
             </div>
           </div>
-          <div class="hours-forecast">
-
-          </div>
+          <div class="hours-forecast"></div>
         </div>
       </section>
       <section class="map"></section>
@@ -85,5 +83,11 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+    <div class="night-mode">
+      <label id="night" class="switch">
+        <input type="checkbox" />
+        <span class="slider round"></span>
+      </label>
+    </div>
   </body>
 </html>
