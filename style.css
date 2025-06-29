@@ -172,8 +172,16 @@ section {
   font-size: 6rem;
 }
 .temperature-unit {
-  font-size: 4rem;
   display: inline-block;
+  transform: translateY(-0.2rem);
+}
+.forecast-weather-details .temperature-unit {
+  font-size: 2rem;
+  transform: translateY(-0.5rem);
+}
+
+.temperature .temperature-unit {
+  font-size: 4rem;
   transform: translateY(-0.8rem);
 }
 
@@ -463,3 +471,71 @@ input:checked + .slider:before {
   font-size: 1rem;
 }
 
+.city-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.city-list-item {
+  padding: 1rem;
+}
+
+.star-city-conditions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.star-city-condition {
+  grid-column: 2/-1;
+}
+
+.star-weather {
+  grid-row: span 2;
+  justify-self: center;
+}
+
+.star-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.star-city-degree,
+.star-city-condition {
+  align-self: end;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.starred-cities {
+  display: flex;
+  flex-direction: column;
+}
+.city-list {
+  overflow-y: scroll;
+  max-height: 16rem;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.star-container {
+  width: 100%;
+}
+
+.btn--up,
+.btn--down {
+  position: absolute;
+}
+
+.btn--up {
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+}
+
+.btn--down {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

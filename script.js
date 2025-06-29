@@ -19,6 +19,14 @@ switchBtn.addEventListener("click", changeMode);
 
 const rightBtn = document.querySelector(`.btn--right`);
 const lefttBtn = document.querySelector(`.btn--left`);
+const upBtn = document.querySelector(`.btn--up`);
+const downBtn = document.querySelector(`.btn--down`);
+
+const starGap =
+  +window
+    .getComputedStyle(document.querySelector(`.city-list`))
+    .gap.replace(/\D/g, "") +
+  document.querySelector(`.city-list-item`).offsetHeight;
 
 const hourlyGap =
   +window
@@ -33,5 +41,16 @@ const changeRightList = function () {
 const changeLeftList = function () {
   document.querySelector(`.forecast-list`).scrollLeft -= hourlyGap;
 };
+
+const changeUpList = function () {
+  document.querySelector(".city-list").scrollTop -= starGap;
+};
+
+const changeDownList = function () {
+  document.querySelector(".city-list").scrollTop += starGap;
+};
+
 rightBtn.addEventListener(`click`, changeRightList);
 lefttBtn.addEventListener(`click`, changeLeftList);
+upBtn.addEventListener(`click`, changeUpList);
+downBtn.addEventListener(`click`, changeDownList);
