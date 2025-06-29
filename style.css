@@ -521,6 +521,7 @@ input:checked + .slider:before {
 
 .star-container {
   width: 100%;
+  position: relative;
 }
 
 .btn--up,
@@ -529,13 +530,13 @@ input:checked + .slider:before {
 }
 
 .btn--up {
-  top: 20%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -20%);
+  transform: translate(-50%, -3rem);
 }
 
 .btn--down {
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 3rem);
 }
