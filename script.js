@@ -1,5 +1,9 @@
 import { API_KEY } from "./config.js";
+// API
 
+const weatherData = await fetch (`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=sofia&days=3`)
+const data = await weatherData.json()
+console.log( data);
 // NIGHT MODE
 
 const switchBtn = document.querySelector("span.slider");
