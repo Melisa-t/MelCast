@@ -1,3 +1,7 @@
+import { API_KEY } from "./config.js";
+
+// NIGHT MODE
+
 const switchBtn = document.querySelector("span.slider");
 const html = document.querySelector(`html`);
 
@@ -16,6 +20,8 @@ const changeMode = function () {
 };
 
 switchBtn.addEventListener("click", changeMode);
+
+// SCROLLING IN HOURLY FORECAST AND STARRED CITIES
 
 const rightBtn = document.querySelector(`.btn--right`);
 const lefttBtn = document.querySelector(`.btn--left`);
