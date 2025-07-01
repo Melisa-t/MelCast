@@ -1,4 +1,4 @@
-[data-theme="light"] {
+body[data-theme="light"] {
   --primary-color: rgb(74, 121, 151);
   --secondary-color: rgb(86, 149, 186);
   --tertiary-color: rgb(195, 216, 229);
@@ -6,7 +6,7 @@
   --content: "🔆";
 }
 
-[data-theme="dark"] {
+body[data-theme="dark"] {
   --blur: #ffffff1b;
   --primary-color: rgb(25, 45, 57);
   --secondary-color: rgb(9, 31, 43);
@@ -38,11 +38,12 @@ body {
   height: 100%;
   background-color: var(--primary-color, rgb(74, 121, 151));
   background: linear-gradient(
-    to right bottom,
-    var(--primary-color) 0%,
-    var(--secondary-color) 54%,
-    var(--tertiary-color) 100%
-  ), rgb(74, 121, 151);
+      to right bottom,
+      var(--primary-color) 0%,
+      var(--secondary-color) 54%,
+      var(--tertiary-color) 100%
+    ),
+    rgb(74, 121, 151);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -51,16 +52,6 @@ body {
   justify-content: center;
   align-items: center;
   color: #fff;
-}
-
-body.dark {
-  background-color: var(--primary-color);
-  background: linear-gradient(
-    to right bottom,
-    var(--primary-color) 0%,
-    var(--secondary-color) 54%,
-    var(--tertiary-color) 100%
-  );
 }
 
 section {
@@ -75,7 +66,7 @@ section {
   box-shadow: inset 0px 0px 30px #ffffff45;
   border: 1px solid rgba(255, 255, 255, 0.21);
   backdrop-filter: blur(100px);
-  background-color:  var(--blur, #dbdbdb);
+  background-color: var(--blur, #dbdbdb);
   border-radius: 9px;
 }
 
