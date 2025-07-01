@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const html = document.documentElement;
 
   const applyTheme = (theme) => {
-    document.body.setAttribute("data-theme", theme);
+    html.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    document.body.offsetHeight;
+    html.offsetHeight;
   };
 
   const toggleTheme = () => {
-    const currentTheme = document.body.getAttribute("data-theme");
+    const currentTheme = html.getAttribute("data-theme");
     const newTheme = currentTheme === "light" ? "dark" : "light";
     applyTheme(newTheme);
   };
@@ -28,9 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (savedTheme) {
     applyTheme(savedTheme);
   } else {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     applyTheme(prefersDark ? "dark" : "light");
   }
 

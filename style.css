@@ -1,4 +1,4 @@
-body[data-theme="light"] {
+[data-theme="light"] {
   --primary-color: rgb(74, 121, 151);
   --secondary-color: rgb(86, 149, 186);
   --tertiary-color: rgb(195, 216, 229);
@@ -6,7 +6,7 @@ body[data-theme="light"] {
   --content: "🔆";
 }
 
-body[data-theme="dark"] {
+[data-theme="dark"] {
   --blur: #ffffff1b;
   --primary-color: rgb(25, 45, 57);
   --secondary-color: rgb(9, 31, 43);
@@ -806,10 +806,18 @@ input:checked + .slider:before {
   }
 }
 
-
 @media (max-width: 18em) {
   html {
     font-size: 30%;
   }
+  .slider:before {
+    height: 15px;
+    width: 15px;
+  }
 
+  input:checked + .slider:before {
+    -webkit-transform: translateX(2.4rem);
+    -ms-transform: translateX(2.4rem);
+    transform: translateX(2.4rem);
+  }
 }
