@@ -812,12 +812,4 @@ input:checked + .slider:before {
     font-size: 30%;
   }
 
-  .city-list-item {
-    padding: 1rem 2rem;
-  }
-
-  .weather-logo {
-    width: 8rem;
-    height: 8rem;
-  }
 }
