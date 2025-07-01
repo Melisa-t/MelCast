@@ -69,7 +69,7 @@ section {
   box-shadow: inset 0px 0px 30px #ffffff6f;
   border: 1px solid rgba(255, 255, 255, 0.185);
   backdrop-filter: blur(100px);
-  background-color:  var(--blur);
+  background-color:  var(--blur, #dbdbdb) ;
   border-radius: 9px;
   font-size: 1.2rem;
   padding: 3rem 2.4rem;
@@ -79,7 +79,7 @@ section {
   box-shadow: inset 0px 0px 30px #ffffff45;
   border: 1px solid rgba(255, 255, 255, 0.21);
   backdrop-filter: blur(100px);
-  background-color:  var(--blur);
+  background-color:  var(--blur, #dbdbdb);
   border-radius: 9px;
 }
 
