@@ -12,13 +12,13 @@ const switchBtn = document.querySelector("span.slider");
 const html = document.documentElement;
 
 const applyTheme = (theme) => {
-  html.setAttribute("data-theme", theme);
+  document.body.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
-  html.offsetHeight;
+  document.body.offsetHeight;
 };
 
 const toggleTheme = () => {
-  const currentTheme = html.getAttribute("data-theme");
+  const currentTheme = document.body.getAttribute("data-theme");
   const newTheme = currentTheme === "light" ? "dark" : "light";
   applyTheme(newTheme);
 };
