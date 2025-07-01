@@ -613,6 +613,7 @@ input:checked + .slider:before {
 
   .slider:before {
     bottom: 3px;
+  }
 }
 
 @media (max-width: 68em) {
@@ -786,7 +787,7 @@ input:checked + .slider:before {
     padding: 0.5rem 1rem;
   }
 
-    .slider:before {
+  .slider:before {
     height: 11px;
     width: 11px;
   }
