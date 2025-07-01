@@ -14,6 +14,7 @@ const html = document.documentElement;
 const applyTheme = (theme) => {
   html.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
+  html.offsetHeight;
 };
 
 const toggleTheme = () => {
