@@ -1,6 +1,6 @@
 // import { API_KEY } from "./config.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+
   // ✅ API FETCH
   // const weatherData = await fetch(
   //   `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=sofia&days=3`
@@ -72,4 +72,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   lefttBtn?.addEventListener(`click`, changeLeftList);
   upBtn?.addEventListener(`click`, changeUpList);
   downBtn?.addEventListener(`click`, changeDownList);
-});
+
