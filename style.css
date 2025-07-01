@@ -805,3 +805,19 @@ input:checked + .slider:before {
     height: 8rem;
   }
 }
+
+
+@media (max-width: 18em) {
+  html {
+    font-size: 30%;
+  }
+
+  .city-list-item {
+    padding: 1rem 2rem;
+  }
+
+  .weather-logo {
+    width: 8rem;
+    height: 8rem;
+  }
+}
