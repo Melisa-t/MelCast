@@ -9,20 +9,28 @@ console.log(data);
 // NIGHT MODE
 
 const switchBtn = document.querySelector("span.slider");
-const html = document.querySelector(`html`);
+const html = document.documentElement;
 
-const changeMode = function () {
-  const data = html.getAttribute(`data-theme`);
-  if (data === `light`) {
-    html.setAttribute("data-theme", `dark`);
-    return;
-  } else if (data === `dark`) {
-    html.setAttribute("data-theme", `light`);
-    return;
-  }
+const applyTheme = (theme) => {
+  html.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
 };
 
-switchBtn.addEventListener("click", changeMode);
+const toggleTheme = () => {
+  const currentTheme = html.getAttribute("data-theme");
+  const newTheme = currentTheme === "light" ? "dark" : "light";
+  applyTheme(newTheme);
+};
+
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  applyTheme(savedTheme);
+} else {
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(prefersDark ? "dark" : "light");
+}
+
+switchBtn.addEventListener("click", toggleTheme);
 
 // SCROLLING IN HOURLY FORECAST AND STARRED CITIES
 
