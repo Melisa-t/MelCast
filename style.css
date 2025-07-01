@@ -38,11 +38,11 @@ body {
   height: 100%;
   background-color: var(--primary-color);
   background: linear-gradient(
-      to right bottom,
-      var(--primary-color) 0%,
-      var(--secondary-color) 54%,
-      var(--tertiary-color) 100%
-    );
+    to right bottom,
+    var(--primary-color) 0%,
+    var(--secondary-color) 54%,
+    var(--tertiary-color) 100%
+  );
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -802,6 +802,21 @@ input:checked + .slider:before {
   .weather-logo {
     width: 8rem;
     height: 8rem;
+  }
+
+  .app-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  }
+  .map,
+  .starred-cities {
+    grid-column: span 2;
+  }
+  .city-list-item {
+    justify-content: space-between;
+  }
+  .star-city-conditions {
+    column-gap: 4rem;
   }
 }
 
