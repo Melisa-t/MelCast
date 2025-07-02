@@ -48,7 +48,7 @@ class CurrentWeather extends WeatherClass {
   _clear() {
     this.parentEl.innerHTML = ``;
   }
-
+  _getlocation() {}
   _generateMarkUp(data) {
     return `
           <input class="search-box" type="text" placeholder="Search.." />
@@ -202,10 +202,10 @@ class CurrentWeather extends WeatherClass {
 const currentWeatherCl = new CurrentWeather();
 
 const weatherData = await fetch(
-  `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=sofia&days=3&aqi=yes`
+  `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
 );
 const data = await weatherData.json();
-console.log(data);
+
 
 const localDate = new Date(data.location.localtime);
 
