@@ -340,7 +340,7 @@ class ForecastCl extends CurrentWeather {
         const forecastDate = new Date(hour.date).getDate();
         console.log(hour);
         return `<li class="forecast-list-item blur-border">
-            <div class="forecast-day">${days[forecastDate+1]}</div>
+            <div class="forecast-day">${days[forecastDate + 1]}</div>
             <div class="forecast-weather-details">
               <img
                 src="${hour.day.condition.icon}"
@@ -389,16 +389,20 @@ class ForecastCl extends CurrentWeather {
               </div>
               <div class="forecast-minmax">
                 <p>
-                  Min: <span class="forecast-min-temp">${parseInt(hour.day.mintemp_c)}</span>
+                  Min: <span class="forecast-min-temp">${parseInt(
+                    hour.day.mintemp_c
+                  )}</span>
                   <span class="temperature-unit">°C</span>
                 </p>
                 <p>
-                  Max: <span class="forecast-max-temp">${parseInt(hour.day.maxtemp_c)}</span>
+                  Max: <span class="forecast-max-temp">${parseInt(
+                    hour.day.maxtemp_c
+                  )}</span>
                   <span class="temperature-unit">°C</span>
                 </p>
               </div>
             </div>
-          </li>`
+          </li>`;
       })
       .join(` `);
   }
@@ -423,13 +427,14 @@ const loadSearch = function () {
     document.querySelector(`#search-input`).value = ` `;
 
     await SearchWeather.getLocationData(searchQuery);
+    clickButtons();
   });
 };
 
 const init = async function () {
   await currentWeatherCl.getLocationData();
-  loadSearch();
   clickButtons();
+  loadSearch();
 };
 
 init();
