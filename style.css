@@ -2,7 +2,7 @@
   --primary-color: rgb(74, 121, 151);
   --secondary-color: rgb(86, 149, 186);
   --tertiary-color: rgb(195, 216, 229);
-  --blur: rgba(255, 255, 255, 0.064);
+  --blur: rgba(255, 255, 255, 0.174);
   --content: "🔆";
 }
 
@@ -185,6 +185,8 @@ section {
 }
 
 .weather-logo {
+  width: 8rem;
+  height: 8rem;
   grid-row: span 2;
   justify-self: center;
   align-self: center;
@@ -820,8 +822,8 @@ input:checked + .slider:before {
     gap: 0.5rem;
   }
   .weather-logo {
-    width: 9rem;
-    height: 9rem;
+    width: 6rem;
+    height: 6rem;
   }
 }
 
@@ -847,8 +849,8 @@ input:checked + .slider:before {
   }
 
   .weather-logo {
-    width: 8rem;
-    height: 8rem;
+    width: 7rem;
+    height: 7rem;
   }
 
   .slider:before {

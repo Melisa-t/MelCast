@@ -232,7 +232,7 @@ class CurrentWeather extends WeatherClass {
             <div class="uv-condition">
               <img
                 class="condition-icon"
-                src="https://img.icons8.com/?size=100&id=oVhznwPN2V1v&format=png&color=000000"
+                src="https://i.ibb.co/B5cx5BY0/protect.png"
                 alt=""
               />
               <p><span class="uv-index">${parseInt(data.current.uv)}</span></p>
@@ -340,7 +340,7 @@ class ForecastCl extends CurrentWeather {
         const forecastDate = new Date(hour.date).getDate();
         console.log(hour);
         return `<li class="forecast-list-item blur-border">
-            <div class="forecast-day">${days[forecastDate]}</div>
+            <div class="forecast-day">${days[forecastDate+1]}</div>
             <div class="forecast-weather-details">
               <img
                 src="${hour.day.condition.icon}"
@@ -379,9 +379,10 @@ class ForecastCl extends CurrentWeather {
                 }</span>%</p>
               </div>
               <div class="forecast-uv-condition">
+              
                 <img
                   class="forecast-condition-icon"
-                  src="https://img.icons8.com/?size=100&id=oVhznwPN2V1v&format=png&color=000000"
+                  src="https://i.ibb.co/B5cx5BY0/protect.png"
                   alt=""
                 />
                 <p><span class="uv-index">${parseInt(hour.day.uv)}</span></p>
