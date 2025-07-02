@@ -1,18 +1,56 @@
 import { API_KEY } from "./config.js";
 
-let coords = [];
-function success(position) {
-  coords = [position.coords.latitude, position.coords.longitude];
-}
-function error() {
-  throw error("Unable to retrieve your location");
-}
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
-if (!navigator.geolocation) {
-  throw error("Geolocation is not supported by your browser");
-} else {
-  navigator.geolocation.getCurrentPosition(success, error);
-}
+const clickButtons = function () {
+  // ✅ SCROLLING IN HOURLY FORECAST AND STARRED CITIES
+  const rightBtn = document.querySelector(`.btn--right`);
+  const lefttBtn = document.querySelector(`.btn--left`);
+  const upBtn = document.querySelector(`.btn--up`);
+  const downBtn = document.querySelector(`.btn--down`);
+
+  const starGap =
+    +window
+      .getComputedStyle(document.querySelector(`.city-list`))
+      .gap.replace(/\D/g, "") +
+    document.querySelector(`.city-list-item`)?.offsetHeight;
+
+  const hourlyGap =
+    +window
+      .getComputedStyle(document.querySelector(`.forecast-list`))
+      .gap.replace(/\D/g, "") +
+    document.querySelector(`.hourly-forecast`)?.offsetWidth;
+
+  const changeRightList = () => {
+    document.querySelector(`.forecast-list`).scrollLeft += hourlyGap;
+  };
+
+  const changeLeftList = () => {
+    document.querySelector(`.forecast-list`).scrollLeft -= hourlyGap;
+  };
+
+  const changeUpList = () => {
+    document.querySelector(".city-list").scrollTop -= starGap;
+  };
+
+  const changeDownList = () => {
+    document.querySelector(".city-list").scrollTop += starGap;
+  };
+
+  rightBtn?.addEventListener(`click`, changeRightList);
+  lefttBtn?.addEventListener(`click`, changeLeftList);
+  upBtn?.addEventListener(`click`, changeUpList);
+  downBtn?.addEventListener(`click`, changeDownList);
+};
+
 //  API FETCH
 
 class WeatherClass {
@@ -65,11 +103,64 @@ class CurrentWeather extends WeatherClass {
     this._data = data;
 
     this.render(this._data);
+    this.forecastHourArranger(this._data);
+    forecastCl.render(this._data);
   }
+
+  forecastHourArranger = function (data) {
+    const firstDayHours = data.forecast.forecastday[0].hour
+      .filter((hours) => {
+        const hoursForecastHour = new Date(hours.time);
+        if (hoursForecastHour.getHours() > this._localDate.getHours())
+          return hours;
+      })
+      .map((hour) => {
+        return `<li class="hourly-forecast blur-border">
+                <p class="hour">${hour.time.split(` `)[1]}</p>
+                <img
+                  src="${hour.condition.icon}"
+                  class="hourly-img"
+                  alt=""
+                  class="hourly-condition"
+                />
+                <p class="hour-degree">
+                  ${parseInt(
+                    hour.temp_c
+                  )} <span class="temperature-unit">°C</span>
+                </p>
+                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
+              </li>`;
+      })
+      .join(``);
+    const secondDayHours = data.forecast.forecastday[1].hour
+      .filter((hours) => {
+        const hoursForecastHour = new Date(hours.time);
+        if (hoursForecastHour.getHours() < +6) return hours;
+      })
+      .map((hour) => {
+        return `<li class="hourly-forecast blur-border">
+                <p class="hour">${hour.time.split(` `)[1]}</p>
+                <img
+                  src="${hour.condition.icon}"
+                  class="hourly-img"
+                  alt=""
+                  class="hourly-condition"
+                />
+                <p class="hour-degree">
+                  ${parseInt(
+                    hour.temp_c
+                  )} <span class="temperature-unit">°C</span>
+                </p>
+                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
+              </li>`;
+      })
+      .join(``);
+    const finalHoursList = firstDayHours.concat(secondDayHours);
+    return finalHoursList;
+  };
 
   _generateMarkUp(data) {
     return `
-
           <div class="location-container">
             <div class="location-box">
               <ion-icon class="location-img" name="location-outline"></ion-icon>
@@ -168,30 +259,7 @@ class CurrentWeather extends WeatherClass {
           <div class="hours-forecast">
             <ul class="forecast-list">
           
-          ${data.forecast.forecastday[0].hour
-            .filter((hours) => {
-              const hoursForecastHour = new Date(hours.time);
-              if (hoursForecastHour.getHours() > this._localDate.getHours())
-                return hours;
-            })
-            .map((hour) => {
-              return `<li class="hourly-forecast blur-border">
-                <p class="hour">${hour.time.split(` `)[1]}</p>
-                <img
-                  src="${hour.condition.icon}"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  ${parseInt(
-                    hour.temp_c
-                  )} <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
-              </li>`;
-            })
-            .join(``)}
+          ${this.forecastHourArranger(data)}
             </ul>
             <ion-icon
               class="btn btn--left"
@@ -238,10 +306,104 @@ class SearchWeatherCl extends CurrentWeather {
     this._data = data;
 
     this.render(this._data);
+    forecastCl.render(this._data);
   }
 }
 
 const SearchWeather = new SearchWeatherCl();
+
+class ForecastCl extends CurrentWeather {
+  _data;
+  parentEl = document.querySelector(`.daily-forecast`);
+  markUp;
+  _localDate;
+
+  render(data) {
+    this._clear();
+    this._data = data;
+    const localDate = new Date(data.location.localtime);
+    this._localDate = localDate;
+    this.markUp = this._generateMarkUp(data);
+    this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
+  }
+  _clear() {
+    this.parentEl.innerHTML = ``;
+  }
+
+  _generateMarkUp(data) {
+    return data.forecast.forecastday
+      .filter((hour) => {
+        const forecastDate = new Date(hour.date).getDate();
+        if (this._localDate.getDate() < forecastDate) return hour;
+      })
+      .map((hour) => {
+        const forecastDate = new Date(hour.date).getDate();
+        console.log(hour);
+        return `<li class="forecast-list-item blur-border">
+            <div class="forecast-day">${days[forecastDate]}</div>
+            <div class="forecast-weather-details">
+              <img
+                src="${hour.day.condition.icon}"
+                alt="${hour.day.condition.text}"
+                class="forecast-logo"
+              />
+              <p class="forecast-temperature">
+                <span class="forecast-temperature-degree">${parseInt(
+                  hour.day.avgtemp_c
+                )}</span
+                ><span class="temperature-unit">°C</span>
+              </p>
+              <p class="forecast-temperature-condition">${
+                hour.day.condition.text
+              }</p>
+            </div>
+            <div class="forecast-weather-conditions blur-border">
+              <div class="forecast-wind-condition">
+                <img
+                  class="forecast-condition-icon"
+                  src="https://img.icons8.com/?size=100&id=pLiaaoa41R9n&format=png&color=000000"
+                  alt=""
+                />
+                <p><span class="forecast-wind">${parseInt(
+                  hour.day.maxwind_kph
+                )}</span> km/h</p>
+              </div>
+              <div class="forecast-precipitation-condition">
+                <img
+                  class="forecast-condition-icon"
+                  src="https://img.icons8.com/?size=100&id=15362&format=png&color=000000"
+                  alt=""
+                />
+                <p><span class="forecast-precipitation">${
+                  hour.day.daily_chance_of_rain
+                }</span>%</p>
+              </div>
+              <div class="forecast-uv-condition">
+                <img
+                  class="forecast-condition-icon"
+                  src="https://img.icons8.com/?size=100&id=oVhznwPN2V1v&format=png&color=000000"
+                  alt=""
+                />
+                <p><span class="uv-index">${parseInt(hour.day.uv)}</span></p>
+              </div>
+              <div class="forecast-minmax">
+                <p>
+                  Min: <span class="forecast-min-temp">${parseInt(hour.day.mintemp_c)}</span>
+                  <span class="temperature-unit">°C</span>
+                </p>
+                <p>
+                  Max: <span class="forecast-max-temp">${parseInt(hour.day.maxtemp_c)}</span>
+                  <span class="temperature-unit">°C</span>
+                </p>
+              </div>
+            </div>
+          </li>`
+      })
+      .join(` `);
+  }
+}
+
+const forecastCl = new ForecastCl();
 
 const twelveHoursToTwentyFour = function (time) {
   const [hours, minutes] = time.split(`:`);
@@ -252,13 +414,11 @@ const twelveHoursToTwentyFour = function (time) {
 const loadSearch = function () {
   const searchForm = document.querySelector(`#markup-form`);
   if (!searchForm) return;
-  
+
   let searchQuery;
 
   searchForm.addEventListener(`submit`, async function () {
-
     searchQuery = document.querySelector(`#search-input`).value;
-    console.log(searchQuery);
     document.querySelector(`#search-input`).value = ` `;
 
     await SearchWeather.getLocationData(searchQuery);
@@ -268,6 +428,7 @@ const loadSearch = function () {
 const init = async function () {
   await currentWeatherCl.getLocationData();
   loadSearch();
+  clickButtons();
 };
 
 init();
@@ -297,42 +458,3 @@ if (savedTheme) {
 }
 
 switchBtn?.addEventListener("click", toggleTheme);
-
-// ✅ SCROLLING IN HOURLY FORECAST AND STARRED CITIES
-const rightBtn = document.querySelector(`.btn--right`);
-const lefttBtn = document.querySelector(`.btn--left`);
-const upBtn = document.querySelector(`.btn--up`);
-const downBtn = document.querySelector(`.btn--down`);
-
-const starGap =
-  +window
-    .getComputedStyle(document.querySelector(`.city-list`))
-    .gap.replace(/\D/g, "") +
-  document.querySelector(`.city-list-item`)?.offsetHeight;
-
-const hourlyGap =
-  +window
-    .getComputedStyle(document.querySelector(`.forecast-list`))
-    .gap.replace(/\D/g, "") +
-  document.querySelector(`.hourly-forecast`)?.offsetWidth;
-
-const changeRightList = () => {
-  document.querySelector(`.forecast-list`).scrollLeft += hourlyGap;
-};
-
-const changeLeftList = () => {
-  document.querySelector(`.forecast-list`).scrollLeft -= hourlyGap;
-};
-
-const changeUpList = () => {
-  document.querySelector(".city-list").scrollTop -= starGap;
-};
-
-const changeDownList = () => {
-  document.querySelector(".city-list").scrollTop += starGap;
-};
-
-rightBtn?.addEventListener(`click`, changeRightList);
-lefttBtn?.addEventListener(`click`, changeLeftList);
-upBtn?.addEventListener(`click`, changeUpList);
-downBtn?.addEventListener(`click`, changeDownList);
