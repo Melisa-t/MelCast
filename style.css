@@ -315,8 +315,8 @@ input:checked + .slider:before {
 }
 
 .hourly-img {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 3.6rem;
+  height: 3.6rem;
 }
 
 .hours-forecast {
