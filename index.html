@@ -11,8 +11,12 @@
   <body>
     <div class="container app-grid">
       <section class="current-weather blur-border">
+          <form id="markup-form"class="search-form" onsubmit="event.preventDefault();">
+            <input id="search-input"class="search-box" type="text" placeholder="Search.." /> 
+            <input value="" type="submit" class="search-btn"></input>
+          </form>
         <div class="content">
-          <input class="search-box" type="text" placeholder="Search.." />
+
           <div class="location-container">
             <div class="location-box">
               <ion-icon class="location-img" name="location-outline"></ion-icon>
@@ -27,7 +31,7 @@
               <p class="air-quality">
                 Air Quality: <span class="air-quality-score">1</span>
               </p>
-              <!-- <ion-icon name="star"></ion-icon>  -->
+              <!-- <ion-icon name="star"></ion-icon>   -->
             </div>
           </div>
           <div class="weather-container">
@@ -356,8 +360,6 @@
       <section class="forecast blur-border">
         <h2 class="container-title">2 Day Forecast</h2>
         <ul class="daily-forecast">
-          
-
           <li class="forecast-list-item blur-border">
             <div class="forecast-day">Monday</div>
             <div class="forecast-weather-details">
