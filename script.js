@@ -3,11 +3,10 @@ import { API_KEY } from "./config.js";
 //  API FETCH
 
 const weatherData = await fetch(
-  `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=sofia&days=3&aqi=yes`
+  `https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=${API_KEY}`
 );
 const data = await weatherData.json();
-console.log(data.current);
-const localDate = new Date(data.location.localtime);
+console.log(data);
 
 // HTML CHANGER
 const currentWeather = document.querySelector(`.content`);
@@ -17,45 +16,30 @@ const currentMarkup = `
             <div class="location-box">
               <ion-icon class="location-img" name="location-outline"></ion-icon>
               <span>
-                <p class="city-country-location">${data.location.name}, ${
-  data.location.country
-}</p>
-                <p class="date">${localDate
-                  .getDate()
-                  .toString()
-                  .padStart(2, 0)}/${localDate
-  .getMonth()
-  .toString()
-  .padStart(
-    2,
-    0
-  )}/${localDate.getFullYear()} ${localDate.getHours()}:${localDate.getMinutes()}</p>
+                <p class="city-country-location">City, Country</p>
+                <p class="date">Date</p>
               </span>
             </div>
 
             <div class="star-air">
               <ion-icon class="star" name="star-outline"></ion-icon>
               <p class="air-quality">
-                Air Quality: <span class="air-quality-score">${
-                  data.current.air_quality["us-epa-index"]
-                }</span>
+                Air Quality: <span class="air-quality-score">1</span>
               </p>
               <!-- <ion-icon name="star"></ion-icon>  -->
             </div>
           </div>
           <div class="weather-container">
             <img
-              src=${data.current.condition.icon}
+              src="https://img.icons8.com/?size=100&id=C1TelaAFdrrO&format=png&color=000000"
               alt=""
               class="weather-logo"
             />
             <p class="temperature">
-              <span class="temperature-degree">${parseInt(
-                data.current.temp_c
-              )}</span
+              <span class="temperature-degree">24</span
               ><span class="temperature-unit">°C</span>
             </p>
-            <p class="temperature-condition">${data.current.condition.text}</p>
+            <p class="temperature-condition">Sunny</p>
           </div>
           <div class="weather-conditions blur-border">
             <div class="wind-condition">
@@ -272,14 +256,13 @@ const currentMarkup = `
               <p class="sun-title">Sunset</p>
               <span class="sunset-hour">21:00</span>
             </div>
-          </div>
-`;
+          </div>`;
 const parentElChanger = function (parentEl, markup) {
   parentEl.innerHTML = ``;
   parentEl.insertAdjacentHTML(`afterbegin`, markup);
 };
 
-parentElChanger(currentWeather, currentMarkup);
+// parentElChanger(currentWeather, currentMarkup);
 
 //  NIGHT MODE
 const switchBtn = document.querySelector("span.slider");
