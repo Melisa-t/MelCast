@@ -3,10 +3,18 @@ import { API_KEY } from "./config.js";
 //  API FETCH
 
 const weatherData = await fetch(
-  `https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=${API_KEY}`
+  `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=sofia&days=3&aqi=yes`
 );
 const data = await weatherData.json();
 console.log(data);
+
+const localDate = new Date(data.location.localtime);
+
+const twelveHoursToTwentyFour = function (time) {
+  const [hours, minutes] = time.split(`:`);
+  const finalTime = `${+hours === 12 ? "00" : +hours + 12}:${minutes}`;
+  return finalTime;
+};
 
 // HTML CHANGER
 const currentWeather = document.querySelector(`.content`);
@@ -16,30 +24,45 @@ const currentMarkup = `
             <div class="location-box">
               <ion-icon class="location-img" name="location-outline"></ion-icon>
               <span>
-                <p class="city-country-location">City, Country</p>
-                <p class="date">Date</p>
+                <p class="city-country-location">${data.location.name}, ${
+  data.location.country
+}</p>
+                <p class="date">${localDate
+                  .getDate()
+                  .toString()
+                  .padStart(2, 0)}/${localDate
+  .getMonth()
+  .toString()
+  .padStart(2, 0)}/${localDate.getFullYear()} ${localDate
+  .getHours()
+  .toString()
+  .padStart(2, 0)}:${localDate.getMinutes().toString().padStart(2, 0)}</p>
               </span>
             </div>
 
             <div class="star-air">
               <ion-icon class="star" name="star-outline"></ion-icon>
               <p class="air-quality">
-                Air Quality: <span class="air-quality-score">1</span>
+                Air Quality: <span class="air-quality-score">${
+                  data.current.air_quality["us-epa-index"]
+                }</span>
               </p>
               <!-- <ion-icon name="star"></ion-icon>  -->
             </div>
           </div>
           <div class="weather-container">
             <img
-              src="https://img.icons8.com/?size=100&id=C1TelaAFdrrO&format=png&color=000000"
+              src=${data.current.condition.icon}
               alt=""
               class="weather-logo"
             />
             <p class="temperature">
-              <span class="temperature-degree">24</span
+              <span class="temperature-degree">${parseInt(
+                data.current.temp_c
+              )}</span
               ><span class="temperature-unit">°C</span>
             </p>
-            <p class="temperature-condition">Sunny</p>
+            <p class="temperature-condition">${data.current.condition.text}</p>
           </div>
           <div class="weather-conditions blur-border">
             <div class="wind-condition">
@@ -48,7 +71,9 @@ const currentMarkup = `
                 src="https://img.icons8.com/?size=100&id=pLiaaoa41R9n&format=png&color=000000"
                 alt=""
               />
-              <p><span class="wind">6</span> km/h</p>
+              <p><span class="wind">${parseInt(
+                data.current.wind_kph
+              )}</span> km/h</p>
             </div>
             <div class="precipitation-condition">
               <img
@@ -56,7 +81,9 @@ const currentMarkup = `
                 src="https://img.icons8.com/?size=100&id=15362&format=png&color=000000"
                 alt=""
               />
-              <p><span class="precipitation">12</span>%</p>
+              <p><span class="precipitation">${
+                data.forecast.forecastday[0].day.daily_chance_of_rain
+              }</span>%</p>
             </div>
             <div class="uv-condition">
               <img
@@ -64,179 +91,54 @@ const currentMarkup = `
                 src="https://img.icons8.com/?size=100&id=oVhznwPN2V1v&format=png&color=000000"
                 alt=""
               />
-              <p><span class="uv-index">10</span></p>
+              <p><span class="uv-index">${parseInt(data.current.uv)}</span></p>
             </div>
             <div class="feels-minmax">
               <p>
-                Feels like: <span class="feels-like">35</span>
+                Feels like: <span class="feels-like">${parseInt(
+                  data.current.feelslike_c
+                )}</span>
                 <span class="temperature-unit">°C</span>
               </p>
               <p>
-                <span class="min-temp">12</span>
+                <span class="min-temp">${parseInt(
+                  data.forecast.forecastday[0].day.mintemp_c
+                )}</span>
                 <span class="temperature-unit">°C</span> /
-                <span class="max-temp">40</span>
+                <span class="max-temp">${parseInt(
+                  data.forecast.forecastday[0].day.maxtemp_c
+                )}</span>
                 <span class="temperature-unit">°C</span>
               </p>
             </div>
           </div>
           <div class="hours-forecast">
             <ul class="forecast-list">
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
+          
+          ${data.forecast.forecastday[0].hour
+            .filter((hours) => {
+              const hoursForecastHour = new Date(hours.time);
+              if (hoursForecastHour.getHours() > localDate.getHours())
+                return hours;
+            })
+            .map((hour) => {
+              return `<li class="hourly-forecast blur-border">
+                <p class="hour">${hour.time.split(` `)[1]}</p>
                 <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
+                  src="${hour.condition.icon}"
                   class="hourly-img"
                   alt=""
                   class="hourly-condition"
                 />
                 <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
+                  ${parseInt(
+                    hour.temp_c
+                  )} <span class="temperature-unit">°C</span>
                 </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
-              <li class="hourly-forecast blur-border">
-                <p class="hour">12.00</p>
-                <img
-                  src="https://img.icons8.com/?size=100&id=18609&format=png&color=000000"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  13 <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">12%</p>
-              </li>
+                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
+              </li>`;
+            })
+            .join(``)}
             </ul>
             <ion-icon
               class="btn btn--left"
@@ -250,20 +152,25 @@ const currentMarkup = `
           <div class="sunrise-sunset-container">
             <div class="sunrise blur-border">
               <p class="sun-title">Sunrise</p>
-              <span class="sunrise-hour">06:00</span>
+              <span class="sunrise-hour">${
+                data.forecast.forecastday[0].astro.sunrise.split(` `)[0]
+              }</span>
             </div>
             <div class="sunset blur-border">
               <p class="sun-title">Sunset</p>
-              <span class="sunset-hour">21:00</span>
+              <span class="sunset-hour">${
+                twelveHoursToTwentyFour(data.forecast.forecastday[0].astro.sunset.split(` `)[0])
+              }</span>
             </div>
-          </div>`;
+          </div>
+`;
+
 const parentElChanger = function (parentEl, markup) {
   parentEl.innerHTML = ``;
   parentEl.insertAdjacentHTML(`afterbegin`, markup);
 };
 
-// parentElChanger(currentWeather, currentMarkup);
-
+parentElChanger(currentWeather, currentMarkup);
 //  NIGHT MODE
 const switchBtn = document.querySelector("span.slider");
 const html = document.documentElement;
@@ -300,13 +207,13 @@ const starGap =
   +window
     .getComputedStyle(document.querySelector(`.city-list`))
     .gap.replace(/\D/g, "") +
-  document.querySelector(`.city-list-item`).offsetHeight;
+  document.querySelector(`.city-list-item`)?.offsetHeight;
 
 const hourlyGap =
   +window
     .getComputedStyle(document.querySelector(`.forecast-list`))
     .gap.replace(/\D/g, "") +
-  document.querySelector(`.hourly-forecast`).offsetWidth;
+  document.querySelector(`.hourly-forecast`)?.offsetWidth;
 
 const changeRightList = () => {
   document.querySelector(`.forecast-list`).scrollLeft += hourlyGap;
