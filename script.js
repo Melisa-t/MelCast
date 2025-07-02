@@ -101,7 +101,6 @@ class CurrentWeather extends WeatherClass {
     const localDate = new Date(data.location.localtime);
     this._localDate = localDate;
     this._data = data;
-
     this.render(this._data);
     this.forecastHourArranger(this._data);
     forecastCl.render(this._data);
@@ -171,8 +170,8 @@ class CurrentWeather extends WeatherClass {
                 <p class="date">${this._localDate
                   .getDate()
                   .toString()
-                  .padStart(2, 0)}/${this._localDate
-      .getMonth()
+                  .padStart(2, 0)}/${(this._localDate
+      .getMonth() + 1)
       .toString()
       .padStart(2, 0)}/${this._localDate.getFullYear()} ${this._localDate
       .getHours()
@@ -300,7 +299,7 @@ class SearchWeatherCl extends CurrentWeather {
       `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
     );
     const data = await weatherData.json();
-
+    console.log(data);
     const localDate = new Date(data.location.localtime);
     this._localDate = localDate;
     this._data = data;
@@ -338,7 +337,6 @@ class ForecastCl extends CurrentWeather {
       })
       .map((hour) => {
         const forecastDate = new Date(hour.date).getDate();
-        console.log(hour);
         return `<li class="forecast-list-item blur-border">
             <div class="forecast-day">${days[forecastDate + 1]}</div>
             <div class="forecast-weather-details">
