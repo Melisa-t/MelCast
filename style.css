@@ -600,9 +600,7 @@ input:checked + .slider:before {
 
 .starred-cities {
   padding: 1.6rem 2.4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  display: grid;
 }
 .city-list {
   overflow-y: scroll;
@@ -613,9 +611,15 @@ input:checked + .slider:before {
 
 .star-container {
   width: 100%;
+}
+.starred-cities {
   position: relative;
+
 }
 
+.starred-cities .container-title{
+ 
+}
 .btn--up,
 .btn--down {
   position: absolute;
@@ -624,13 +628,13 @@ input:checked + .slider:before {
 .btn--up {
   top: 0;
   left: 50%;
-  transform: translate(-50%, -3rem);
+  transform: translate(-50%, 4rem);
 }
 
 .btn--down {
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, 3rem);
+  transform: translate(-50%, -2rem);
 }
 
 .star-air {

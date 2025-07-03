@@ -166,21 +166,50 @@ class CurrentWeatherCl extends WeatherClass {
   };
 
   _pushStarLocation(data) {
-    document.querySelector(`.star`).addEventListener(`click`, function () {
-      document.querySelector(
-        `.star`
-      ).src = ` https://i.ibb.co/0y1wchP7/star-fill.png`;
-      if (StarredWeather.starred.includes(data)) {
-        const index = StarredWeather.starred.indexOf(data);
+    const starIcon = document.querySelector(`.star`);
+
+    const isStarred = StarredWeather.starred.some(
+      (loc) =>
+        loc.location.name === data.location.name &&
+        loc.location.country === data.location.country
+    );
+
+    // Initial icon setup
+    starIcon.src = isStarred
+      ? "https://i.ibb.co/0y1wchP7/star-fill.png"
+      : "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
+
+    starIcon.addEventListener(`click`, function () {
+      const index = StarredWeather.starred.findIndex(
+        (loc) =>
+          loc.location.name === data.location.name &&
+          loc.location.country === data.location.country
+      );
+
+      if (index > -1) {
+        // Unstar
         StarredWeather.starred.splice(index, 1);
-        document.querySelector(
-          `.star`
-        ).src = `https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png`;
-        console.log(`after splice`, StarredWeather.starred);
-      } else if (!StarredWeather.starred.includes(data)) {
+        StarredWeather.keepStarred();
+        // Remove city from markup
+        const cityItems = document.querySelectorAll(".city-list-item");
+        cityItems.forEach((item) => {
+          if (
+            item.textContent.includes(data.location.name) &&
+            item.textContent.includes(data.location.country)
+          ) {
+            item.remove();
+          }
+        });
+        starIcon.src = "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
+      } else {
+        // Star
         StarredWeather.starred.push(data);
-        console.log(`after adding`, StarredWeather.starred);
+        console.log(StarredWeather.starred);
+        StarredWeather.renderStarredLocation(data);
+        starIcon.src = "https://i.ibb.co/0y1wchP7/star-fill.png";
       }
+
+      StarredWeather.keepStarred();
     });
   }
 
@@ -435,10 +464,67 @@ const forecastCl = new ForecastCl();
 
 class StarredWeatherCl extends CurrentWeatherCl {
   _data;
-  parentEl = document.querySelector(`.star-container`);
+  parentEl = document.querySelector(`.city-list`);
   markUp;
   starred = [];
-  _generateMarkUp(data) {}
+
+  loadStarred() {
+    const data = localStorage.getItem("starred");
+    if (data) {
+      this.starred = JSON.parse(data);
+      this.starred.forEach((location) => {
+        this.renderStarredLocation(location);
+      });
+    }
+  }
+
+  renderStarredLocation(data) {
+    const exists = [...this.parentEl.querySelectorAll(".city-list-item")].some(
+      (el) => el.textContent.includes(data.location.name)
+    );
+    if (exists) return;
+    this._clear();
+    const markup = this._generateMarkUp(this.starred);
+    this.parentEl.insertAdjacentHTML("beforeend", markup);
+  }
+
+  keepStarred() {
+    localStorage.setItem("starred", JSON.stringify(this.starred));
+  }
+
+  addStar(data) {
+    this.starred.push(data);
+    data.bookmarked = true;
+    this.keepStarred();
+  }
+
+  _generateMarkUp(data) {
+    return data
+      .map(
+        (data) =>
+          `<li class="city-list-item blur-border">
+      <p class="star-title"><span>${data.location.name}</span><span>${
+            data.location.country
+          }</span></p>
+      <div class="star-city-conditions">
+        <img
+          class="star-weather"
+          width="48"
+          height="48"
+          src="${data.current.condition.icon}"
+          alt="${data.current.condition.text}"
+        />
+        <p class="star-city-degree">
+          ${parseInt(
+            data.current.temp_c
+          )} <span class="temperature-unit">°C</span>
+        </p>
+        <p class="star-city-condition">${data.current.condition.text}</p>
+      </div>
+    </li>`
+      )
+      .join(``);
+  }
 }
 
 const StarredWeather = new StarredWeatherCl();
