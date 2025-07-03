@@ -54,7 +54,7 @@ const clickButtons = function () {
 //  API FETCH
 
 class WeatherClass {
-  data;
+  _data;
   parentEl;
   markUp;
 
@@ -93,6 +93,7 @@ class CurrentWeatherCl extends WeatherClass {
     this._data = data;
     this.markUp = this._generateMarkUp(data);
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
+    this._pushStarLocation(data);
   }
   _clear() {
     this.parentEl.innerHTML = ` `;
@@ -163,6 +164,19 @@ class CurrentWeatherCl extends WeatherClass {
     const finalHoursList = firstDayHours.concat(secondDayHours);
     return finalHoursList;
   };
+
+  _pushStarLocation(data) {
+    document.querySelector(`.star`).addEventListener(`click`, function () {
+      if (StarredWeather.starred.includes(data)) {
+        const index = StarredWeather.starred.indexOf(data);
+        StarredWeather.starred.splice(index, 1);
+        console.log(`after splice`, StarredWeather.starred);
+      } else if (!StarredWeather.starred.includes(data)) {
+        StarredWeather.starred.push(data);
+        console.log(`after adding`, StarredWeather.starred);
+      }
+    });
+  }
 
   _generateMarkUp(data) {
     return `
@@ -304,7 +318,6 @@ class SearchWeatherCl extends CurrentWeatherCl {
       `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
     );
     const data = await weatherData.json();
-    console.log(data);
     const localDate = new Date(data.location.localtime);
     this._localDate = localDate;
     this._data = data;
@@ -414,11 +427,26 @@ class ForecastCl extends CurrentWeatherCl {
 
 const forecastCl = new ForecastCl();
 
+class StarredWeatherCl extends CurrentWeatherCl {
+  _data;
+  parentEl = document.querySelector(`.star-container`);
+  markUp;
+  starred = [];
+  _generateMarkUp(data) {}
+}
+
+const StarredWeather = new StarredWeatherCl();
+
+console.log(StarredWeather);
+// function for converting 12h to 24h time
+
 const twelveHoursToTwentyFour = function (time) {
   const [hours, minutes] = time.split(`:`);
   const finalTime = `${+hours === 12 ? "00" : +hours + 12}:${minutes}`;
   return finalTime;
 };
+
+//loading search results
 
 const loadSearch = function () {
   const searchForm = document.querySelector(`#markup-form`);
@@ -435,6 +463,8 @@ const loadSearch = function () {
     clickButtons();
   });
 };
+
+//to initialize everything
 
 const init = async function () {
   forecastCl._generateSpinner();
