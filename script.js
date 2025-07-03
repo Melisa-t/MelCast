@@ -64,19 +64,25 @@ class WeatherClass {
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
   }
   _clear() {
-    parentEl.innerHTML = ``;
+    this.parentEl.innerHTML = ` `;
+  }
+
+  _generateSpinner() {
+    const markup = `
+     <div class="loader-div">
+     <div class="loader"></div>
+     <span class="loader-text"> Fetching Data</span>
+     </div>`;
+    this._clear();
+    this.parentEl.insertAdjacentHTML(`afterbegin`, markup);
   }
 
   _generateMarkUp(data) {
     return ``;
   }
-
-  _createSpinner() {
-    this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
-  }
 }
 
-class CurrentWeather extends WeatherClass {
+class CurrentWeatherCl extends WeatherClass {
   _data;
   parentEl = document.querySelector(`.content`);
   markUp;
@@ -89,7 +95,7 @@ class CurrentWeather extends WeatherClass {
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
   }
   _clear() {
-    this.parentEl.innerHTML = ``;
+    this.parentEl.innerHTML = ` `;
   }
 
   async getLocationData() {
@@ -170,8 +176,7 @@ class CurrentWeather extends WeatherClass {
                 <p class="date">${this._localDate
                   .getDate()
                   .toString()
-                  .padStart(2, 0)}/${(this._localDate
-      .getMonth() + 1)
+                  .padStart(2, 0)}/${(this._localDate.getMonth() + 1)
       .toString()
       .padStart(2, 0)}/${this._localDate.getFullYear()} ${this._localDate
       .getHours()
@@ -287,9 +292,9 @@ class CurrentWeather extends WeatherClass {
   }
 }
 
-const currentWeatherCl = new CurrentWeather();
+const currentWeather = new CurrentWeatherCl();
 
-class SearchWeatherCl extends CurrentWeather {
+class SearchWeatherCl extends CurrentWeatherCl {
   _data;
   parentEl = document.querySelector(`.content`);
   markUp;
@@ -305,13 +310,14 @@ class SearchWeatherCl extends CurrentWeather {
     this._data = data;
 
     this.render(this._data);
+
     forecastCl.render(this._data);
   }
 }
 
 const SearchWeather = new SearchWeatherCl();
 
-class ForecastCl extends CurrentWeather {
+class ForecastCl extends CurrentWeatherCl {
   _data;
   parentEl = document.querySelector(`.daily-forecast`);
   markUp;
@@ -326,7 +332,7 @@ class ForecastCl extends CurrentWeather {
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
   }
   _clear() {
-    this.parentEl.innerHTML = ``;
+    this.parentEl.innerHTML = ` `;
   }
 
   _generateMarkUp(data) {
@@ -423,14 +429,17 @@ const loadSearch = function () {
   searchForm.addEventListener(`submit`, async function () {
     searchQuery = document.querySelector(`#search-input`).value;
     document.querySelector(`#search-input`).value = ` `;
-
+    forecastCl._generateSpinner();
+    SearchWeather._generateSpinner();
     await SearchWeather.getLocationData(searchQuery);
     clickButtons();
   });
 };
 
 const init = async function () {
-  await currentWeatherCl.getLocationData();
+  forecastCl._generateSpinner();
+  currentWeather._generateSpinner();
+  await currentWeather.getLocationData();
   clickButtons();
   loadSearch();
 };

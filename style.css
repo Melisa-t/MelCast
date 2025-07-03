@@ -55,6 +55,7 @@ body {
 
 section {
   width: 100%;
+  height: 100%;
   /* height: 35rem; */
   border-radius: 9px;
   font-size: 1.2rem;
@@ -72,6 +73,15 @@ section {
   width: 120rem;
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .app-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -84,7 +94,6 @@ section {
   /* height: 74.8rem; */
   grid-row: span 2;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
 }
@@ -161,8 +170,26 @@ section {
   flex-direction: column;
   gap: 3.2rem;
   justify-content: space-evenly;
+  margin: auto 0 ;
 }
 
+.loader {
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 6.4rem;
+  height: 6.4rem;
+  animation: spin 2s linear infinite;
+}
+
+.loader-div {
+display: flex; 
+flex-direction: column; 
+gap: 2rem;
+align-items: center;
+justify-content: center;
+align-self: center;
+}
 .star {
   width: 2rem;
   height: 2rem;
@@ -779,7 +806,8 @@ input:checked + .slider:before {
     bottom: 2px;
     font-size: 1.6rem;
   }
-  .sunrise, .sunset{
+  .sunrise,
+  .sunset {
     width: 9rem;
   }
 }
@@ -790,7 +818,8 @@ input:checked + .slider:before {
     font-size: 1.8rem;
   }
 
-    .sunrise, .sunset{
+  .sunrise,
+  .sunset {
     width: 15rem;
   }
   .switch {
