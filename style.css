@@ -617,9 +617,6 @@ input:checked + .slider:before {
 
 }
 
-.starred-cities .container-title{
- 
-}
 .btn--up,
 .btn--down {
   position: absolute;

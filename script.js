@@ -559,6 +559,7 @@ const loadSearch = function () {
 //to initialize everything
 
 const init = async function () {
+   StarredWeather.loadStarred() 
   forecastCl._generateSpinner();
   currentWeather._generateSpinner();
   await currentWeather.getLocationData();
