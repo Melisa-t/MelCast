@@ -167,9 +167,15 @@ class CurrentWeatherCl extends WeatherClass {
 
   _pushStarLocation(data) {
     document.querySelector(`.star`).addEventListener(`click`, function () {
+      document.querySelector(
+        `.star`
+      ).src = ` https://i.ibb.co/0y1wchP7/star-fill.png`;
       if (StarredWeather.starred.includes(data)) {
         const index = StarredWeather.starred.indexOf(data);
         StarredWeather.starred.splice(index, 1);
+        document.querySelector(
+          `.star`
+        ).src = `https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png`;
         console.log(`after splice`, StarredWeather.starred);
       } else if (!StarredWeather.starred.includes(data)) {
         StarredWeather.starred.push(data);
@@ -202,8 +208,8 @@ class CurrentWeatherCl extends WeatherClass {
               </span>
             </div>
 
-            <div class="star-air">
-              <ion-icon class="star" name="star-outline"></ion-icon>
+             <div class="star-air">
+              <img class="star" src="https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png" alt="">
               <p class="air-quality">
                 Air Quality: <span class="air-quality-score">${
                   data.current.air_quality["us-epa-index"]
