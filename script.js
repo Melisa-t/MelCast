@@ -17,31 +17,41 @@ const clickButtons = function () {
   const upBtn = document.querySelector(`.btn--up`);
   const downBtn = document.querySelector(`.btn--down`);
 
-  const starGap =
-    +window
-      .getComputedStyle(document.querySelector(`.city-list`))
-      .gap.replace(/\D/g, "") +
-    document.querySelector(`.city-list-item`)?.offsetHeight;
+  const gapCalculator = function (element, child) {
+    if (element === null) return;
+    return (
+      +window.getComputedStyle(element).gap.replace(/\D/g, "") +
+      child?.offsetHeight
+    );
+  };
 
-  const hourlyGap =
-    +window
-      .getComputedStyle(document.querySelector(`.forecast-list`))
-      .gap.replace(/\D/g, "") +
-    document.querySelector(`.hourly-forecast`)?.offsetWidth;
+  const starGap = gapCalculator(
+    document.querySelector(`.city-list`),
+    document.querySelector(`.city-list-item`)
+  );
+
+  const hourlyGap = gapCalculator(
+    document.querySelector(`.forecast-list`),
+    document.querySelector(`.hourly-forecast`)
+  );
 
   const changeRightList = () => {
+    if (document.querySelector(`.forecast-list`) === null) return;
     document.querySelector(`.forecast-list`).scrollLeft += hourlyGap;
   };
 
   const changeLeftList = () => {
+    if (document.querySelector(`.forecast-list`) === null) return;
     document.querySelector(`.forecast-list`).scrollLeft -= hourlyGap;
   };
 
   const changeUpList = () => {
+    if (document.querySelector(`.city-list`) === null) return;
     document.querySelector(".city-list").scrollTop -= starGap;
   };
 
   const changeDownList = () => {
+    if (document.querySelector(`.city-list`) === null) return;
     document.querySelector(".city-list").scrollTop += starGap;
   };
 
@@ -100,18 +110,40 @@ class CurrentWeatherCl extends WeatherClass {
   }
 
   async getLocationData() {
-    const weatherData = await fetch(
-      `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
-    );
-    const data = await weatherData.json();
+    try {
+      const weatherData = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
+      );
+      const data = await weatherData.json();
 
-    const localDate = new Date(data.location.localtime);
-    this._localDate = localDate;
-    this._data = data;
-    this.render(this._data);
-    this.forecastHourArranger(this._data);
-    forecastCl.render(this._data);
+      const localDate = new Date(data.location.localtime);
+      this._localDate = localDate;
+      this._data = data;
+      this.render(this._data);
+      this.forecastHourArranger(this._data);
+      forecastCl.render(this._data);
+    } catch (error) {
+      console.error(error);
+    }
   }
+
+  _renderErrorMessage = function (err) {
+    const markup = `
+    
+    <div class="modal-content">
+  <div class="modal-header">
+    <span class="close">&times;</span>
+    <h2>Modal Header</h2>
+  </div>
+  <div class="modal-body">
+    <p>Error! ${err.message}</p>
+    <p>Some other text...</p>
+  </div>
+  <div class="modal-footer">
+    <h3>Modal Footer</h3>
+  </div>
+</div>`;
+  };
 
   forecastHourArranger = function (data) {
     const firstDayHours = data.forecast.forecastday[0].hour
@@ -201,7 +233,7 @@ class CurrentWeatherCl extends WeatherClass {
           }
         });
         starIcon.src = "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
-        StarredWeather.loadStarred()
+        StarredWeather.loadStarred();
       } else {
         // Star
         StarredWeather.starred.push(data);
@@ -350,17 +382,24 @@ class SearchWeatherCl extends CurrentWeatherCl {
   markUp;
 
   async getLocationData(query) {
-    const weatherData = await fetch(
-      `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
-    );
-    const data = await weatherData.json();
-    const localDate = new Date(data.location.localtime);
-    this._localDate = localDate;
-    this._data = data;
+    try {
+      const weatherData = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
+      );
 
-    this.render(this._data);
+      if (!weatherData.response.ok) throw err;
+      const data = await weatherData.json();
+      const localDate = new Date(data.location.localtime);
+      this._localDate = localDate;
+      this._data = data;
 
-    forecastCl.render(this._data);
+      this.render(this._data);
+
+      forecastCl.render(this._data);
+      console.log(weatherData, data);
+    } catch (err) {
+      console.log(`hihi, ${err.message}`);
+    }
   }
 }
 
@@ -481,7 +520,7 @@ class StarredWeatherCl extends CurrentWeatherCl {
     if (this.starred.length === 0) {
       const markup = `<p class="star-text">No starred cities found! </p>
 `;
-console.log(`test`);
+      console.log(`test`);
       this.parentEl.insertAdjacentHTML("afterbegin", markup);
     }
   }
@@ -571,6 +610,7 @@ const init = async function () {
   forecastCl._generateSpinner();
   currentWeather._generateSpinner();
   await currentWeather.getLocationData();
+
   clickButtons();
   loadSearch();
 };
