@@ -171,6 +171,7 @@ section {
   gap: 3.2rem;
   justify-content: space-evenly;
   margin: auto 0;
+  align-items: center;
 }
 
 .loader {
@@ -614,7 +615,6 @@ input:checked + .slider:before {
 }
 .starred-cities {
   position: relative;
-
 }
 
 .btn--up,
@@ -744,13 +744,6 @@ input:checked + .slider:before {
   .daily-forecast {
     justify-content: space-evenly;
   }
-
-  .btn--down {
-    transform: translate(-50%, 3rem);
-  }
-  .btn--up {
-    transform: translate(-50%, -3rem);
-  }
 }
 
 @media (max-height: 44em) {
@@ -768,13 +761,6 @@ input:checked + .slider:before {
 
   section {
     padding: 1.5rem 2rem;
-  }
-  .btn--down {
-    transform: translate(-50%, 1rem);
-  }
-
-  .btn--up {
-    transform: translate(-50%, -1rem);
   }
 
   .city-list-item {
@@ -822,6 +808,14 @@ input:checked + .slider:before {
   .slider:before {
     bottom: 1.5px;
     font-size: 1.8rem;
+  }
+
+  .btn--down {
+    transform: translate(-50%, -1rem);
+  }
+
+  .btn--up {
+    transform: translate(-50%, 3.6rem);
   }
 
   .sunrise,
