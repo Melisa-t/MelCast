@@ -201,6 +201,7 @@ class CurrentWeatherCl extends WeatherClass {
           }
         });
         starIcon.src = "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
+        StarredWeather.loadStarred()
       } else {
         // Star
         StarredWeather.starred.push(data);
@@ -469,12 +470,18 @@ class StarredWeatherCl extends CurrentWeatherCl {
   starred = [];
 
   loadStarred() {
-    const data = localStorage.getItem("starred");
+    let data = localStorage.getItem("starred");
+    console.log(localStorage);
     if (data) {
       this.starred = JSON.parse(data);
       this.starred.forEach((location) => {
         this.renderStarredLocation(location);
       });
+    }
+    if ((data = [])) {
+      const markup = `<p class="star-text">No starred cities found! </p>
+`;
+      this.parentEl.insertAdjacentHTML("afterbegin", markup);
     }
   }
 
@@ -559,7 +566,7 @@ const loadSearch = function () {
 //to initialize everything
 
 const init = async function () {
-   StarredWeather.loadStarred() 
+  StarredWeather.loadStarred();
   forecastCl._generateSpinner();
   currentWeather._generateSpinner();
   await currentWeather.getLocationData();

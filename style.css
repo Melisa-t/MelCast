@@ -551,6 +551,12 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+}
+.star-text{
+  align-self: center;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .city-list-item {
