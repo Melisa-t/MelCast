@@ -551,9 +551,8 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-
 }
-.star-text{
+.star-text {
   align-self: center;
   font-size: 2rem;
   font-weight: 600;
@@ -761,6 +760,13 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 50em) {
+  .btn--down {
+    transform: translate(-50%, -2rem);
+  }
+
+  .btn--up {
+    transform: translate(-50%, 8rem);
+  }
   .container {
     width: 60rem;
     gap: 2rem;
@@ -818,7 +824,7 @@ input:checked + .slider:before {
   }
 
   .btn--down {
-    transform: translate(-50%, -1rem);
+    transform: translate(-50%, 0rem);
   }
 
   .btn--up {

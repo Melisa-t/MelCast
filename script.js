@@ -471,16 +471,17 @@ class StarredWeatherCl extends CurrentWeatherCl {
 
   loadStarred() {
     let data = localStorage.getItem("starred");
-    console.log(localStorage);
+    console.dir(data);
     if (data) {
       this.starred = JSON.parse(data);
       this.starred.forEach((location) => {
         this.renderStarredLocation(location);
       });
     }
-    if ((data = [])) {
+    if (this.starred.length === 0) {
       const markup = `<p class="star-text">No starred cities found! </p>
 `;
+console.log(`test`);
       this.parentEl.insertAdjacentHTML("afterbegin", markup);
     }
   }
