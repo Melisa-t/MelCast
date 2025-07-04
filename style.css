@@ -790,7 +790,7 @@ input:checked + .slider:before {
 
 .created a:hover,
 .created a:active {
-  color: #dddd;
+  color: #ddd
 }
 
 @media (max-width: 68em) {

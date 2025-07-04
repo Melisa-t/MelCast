@@ -157,7 +157,7 @@ class CurrentWeatherCl extends WeatherClass {
     const firstDayHours = data.forecast.forecastday[0].hour
       .filter((hours) => {
         const hoursForecastHour = new Date(hours.time);
-        if (hoursForecastHour.getHours() > this._localDate.getHours())
+        if (hoursForecastHour.getHours() >= this._localDate.getHours())
           return hours;
       })
       .map((hour) => {
