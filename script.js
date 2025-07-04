@@ -124,6 +124,7 @@ class CurrentWeatherCl extends WeatherClass {
       this.render(this._data);
       this.forecastHourArranger(this._data);
       forecastCl.render(this._data);
+      clickButtons();
     } catch (err) {
       this._clear();
       this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
@@ -383,8 +384,8 @@ class SearchWeatherCl extends CurrentWeatherCl {
       this._data = data;
       this._clear();
       this.render(this._data);
-
       forecastCl.render(this._data);
+      clickButtons();
     } catch (err) {
       this._clear();
       this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
@@ -505,6 +506,13 @@ class StarredWeatherCl extends CurrentWeatherCl {
     e.preventDefault();
     let currentLoc;
     currentLoc = "";
+    if (
+      !e.target.classList.contains(`city-list`) &&
+      (e.target === document.querySelector(`.btn--up`) ||
+        e.target === document.querySelector(`.btn--down`))
+    )
+      return;
+
     const location = e.target.closest(`.city-list-item`).dataset.location;
     if (!document.querySelector(`.city-country-location`))
       StarredWeather._getLocationData(currentLoc, location);
@@ -614,7 +622,6 @@ const loadSearch = function () {
     currentWeather._generateSpinner();
     forecastCl._generateSpinner();
     await SearchWeather.getLocationData(searchQuery);
-    clickButtons();
   });
 };
 
@@ -630,7 +637,6 @@ const init = async function () {
     `click`,
     StarredWeather.changeCurrentWeatherOnClick
   );
-  clickButtons();
   loadSearch();
 };
 
