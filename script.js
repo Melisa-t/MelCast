@@ -17,42 +17,41 @@ const clickButtons = function () {
   const upBtn = document.querySelector(`.btn--up`);
   const downBtn = document.querySelector(`.btn--down`);
 
-  const gapCalculator = function (element, child) {
-    if (element === null) return;
+  const gapCalculator = function (parent, child) {
+    if (parent === null) return;
     return (
-      +window.getComputedStyle(element).gap.replace(/\D/g, "") +
+      +window.getComputedStyle(parent).gap.replace(/\D/g, "") +
       child?.offsetHeight
     );
   };
+  const cityList = document.querySelector(`.city-list`);
+  const cityListItem = document.querySelector(`.city-list-item`);
 
-  const starGap = gapCalculator(
-    document.querySelector(`.city-list`),
-    document.querySelector(`.city-list-item`)
-  );
+  const starGap = gapCalculator(cityList, cityListItem);
 
-  const hourlyGap = gapCalculator(
-    document.querySelector(`.forecast-list`),
-    document.querySelector(`.hourly-forecast`)
-  );
+  const forecastList = document.querySelector(`.forecast-list`);
+  const forecastListItem = document.querySelector(`.hourly-forecast`);
+
+  const hourlyGap = gapCalculator(forecastList, forecastListItem);
 
   const changeRightList = () => {
-    if (document.querySelector(`.forecast-list`) === null) return;
-    document.querySelector(`.forecast-list`).scrollLeft += hourlyGap;
+    if (forecastList === null) return;
+    forecastList.scrollLeft += hourlyGap;
   };
 
   const changeLeftList = () => {
-    if (document.querySelector(`.forecast-list`) === null) return;
-    document.querySelector(`.forecast-list`).scrollLeft -= hourlyGap;
+    if (forecastList === null) return;
+    forecastList.scrollLeft -= hourlyGap;
   };
 
   const changeUpList = () => {
-    if (document.querySelector(`.city-list`) === null) return;
-    document.querySelector(".city-list").scrollTop -= starGap;
+    if (cityList === null) return;
+    cityList.scrollTop -= starGap;
   };
 
   const changeDownList = () => {
-    if (document.querySelector(`.city-list`) === null) return;
-    document.querySelector(".city-list").scrollTop += starGap;
+    if (cityList === null) return;
+    cityList.scrollTop += starGap;
   };
 
   rightBtn?.addEventListener(`click`, changeRightList);
@@ -63,26 +62,26 @@ const clickButtons = function () {
 
 //  API FETCH
 
-class WeatherClass {
-  _data;
-  parentEl;
-  markUp;
+// class WeatherClass {
+//   _data;
+//   parentEl;
+//   markUp;
 
-  render(data) {
-    this._clear();
-    this.markUp = this._generateMarkUp(data);
-    this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
-  }
-  _clear() {
-    this.parentEl.innerHTML = ` `;
-  }
+//   render(data) {
+//     this._clear();
+//     this.markUp = this._generateMarkUp(data);
+//     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
+//   }
+//   _clear() {
+//     this.parentEl.innerHTML = ` `;
+//   }
 
-  _generateMarkUp(data) {
-    return ``;
-  }
-}
+//   _generateMarkUp(data) {
+//     return ``;
+//   }
+// }
 
-class CurrentWeatherCl extends WeatherClass {
+class CurrentWeatherCl {
   _data;
   parentEl = document.querySelector(`.content`);
   markUp;
@@ -248,22 +247,34 @@ class CurrentWeatherCl extends WeatherClass {
         StarredWeather.renderStarredLocation(data);
         starIcon.src = "https://i.ibb.co/0y1wchP7/star-fill.png";
       }
-
       StarredWeather.keepStarred();
     });
   }
 
   _generateMarkUp(data) {
+    const name = data?.location?.name || `Unknown`;
+    const country = data?.location?.country || `Unknown`;
+    const airQuality = data?.current?.air_quality || 0;
+    const conditionIcon = data?.current?.condition?.icon || `Condition Image`;
+    const currentTemp = data?.current?.temp_c || 0;
+    const conditionText = data?.current?.condition?.text || `Unknown`;
+    const windSpeed = data?.current?.wind_kph || 0;
+    const chanceOfRain =
+      data?.forecast?.forecastday[0]?.day?.daily_chance_of_rain || 0;
+    const uvIndex = data?.current?.uv || 0;
+    const feelsLike = data?.current?.feelslike_c || 0;
+    const minTemp = data?.forecast?.forecastday[0]?.day?.mintemp_c || 0;
+    const maxTemp = data?.forecast?.forecastday[0]?.day?.maxtemp_c || 0;
+    const sunriseHour =
+      data?.forecast?.forecastday[0]?.astro.sunrise || `Unknown`;
+    const sunsetHour =
+      data?.forecast?.forecastday[0]?.astro.sunset || `Unknown`;
     return `
           <div class="location-container">
             <div class="location-box">
               <ion-icon class="location-img" name="location-outline"></ion-icon>
               <span>
-                <p class="city-country-location" data-current-location="${
-                  data.location.name
-                } ${data.location.country}">${data.location.name}, ${
-      data.location.country
-    }</p>
+                <p class="city-country-location" data-current-location="${name} ${country}">${name}, ${country}</p>
                 <p class="date">${this._localDate
                   .getDate()
                   .toString()
@@ -283,7 +294,7 @@ class CurrentWeatherCl extends WeatherClass {
               <img class="star" src="https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png" alt="">
               <p class="air-quality">
                 Air Quality: <span class="air-quality-score">${
-                  data.current.air_quality["us-epa-index"]
+                  airQuality["us-epa-index"]
                 }</span>
               </p>
               <!-- <ion-icon name="star"></ion-icon>  -->
@@ -291,17 +302,15 @@ class CurrentWeatherCl extends WeatherClass {
           </div>
           <div class="weather-container">
             <img
-              src=${data.current.condition.icon}
+              src=${conditionIcon}
               alt=""
               class="weather-logo"
             />
             <p class="temperature">
-              <span class="temperature-degree">${parseInt(
-                data.current.temp_c
-              )}</span
+              <span class="temperature-degree">${parseInt(currentTemp)}</span
               ><span class="temperature-unit">°C</span>
             </p>
-            <p class="temperature-condition">${data.current.condition.text}</p>
+            <p class="temperature-condition">${conditionText}</p>
           </div>
           <div class="weather-conditions blur-border">
             <div class="wind-condition">
@@ -310,9 +319,7 @@ class CurrentWeatherCl extends WeatherClass {
                 src="https://img.icons8.com/?size=100&id=pLiaaoa41R9n&format=png&color=000000"
                 alt=""
               />
-              <p><span class="wind">${parseInt(
-                data.current.wind_kph
-              )}</span> km/h</p>
+              <p><span class="wind">${parseInt(windSpeed)}</span> km/h</p>
             </div>
             <div class="precipitation-condition">
               <img
@@ -320,9 +327,7 @@ class CurrentWeatherCl extends WeatherClass {
                 src="https://img.icons8.com/?size=100&id=15362&format=png&color=000000"
                 alt=""
               />
-              <p><span class="precipitation">${
-                data.forecast.forecastday[0].day.daily_chance_of_rain
-              }</span>%</p>
+              <p><span class="precipitation">${chanceOfRain}</span>%</p>
             </div>
             <div class="uv-condition">
               <img
@@ -330,23 +335,19 @@ class CurrentWeatherCl extends WeatherClass {
                 src="https://i.ibb.co/B5cx5BY0/protect.png"
                 alt=""
               />
-              <p><span class="uv-index">${parseInt(data.current.uv)}</span></p>
+              <p><span class="uv-index">${parseInt(uvIndex)}</span></p>
             </div>
             <div class="feels-minmax">
               <p>
                 Feels like: <span class="feels-like">${parseInt(
-                  data.current.feelslike_c
+                  feelsLike
                 )}</span>
                 <span class="temperature-unit">°C</span>
               </p>
               <p>
-                <span class="min-temp">${parseInt(
-                  data.forecast.forecastday[0].day.mintemp_c
-                )}</span>
+                <span class="min-temp">${parseInt(minTemp)}</span>
                 <span class="temperature-unit">°C</span> <span class="separator">/</span>
-                <span class="max-temp">${parseInt(
-                  data.forecast.forecastday[0].day.maxtemp_c
-                )}</span>
+                <span class="max-temp">${parseInt(maxTemp)}</span>
                 <span class="temperature-unit">°C</span>
               </p>
             </div>
@@ -368,14 +369,12 @@ class CurrentWeatherCl extends WeatherClass {
           <div class="sunrise-sunset-container">
             <div class="sunrise blur-border">
               <p class="sun-title">Sunrise</p>
-              <span class="sunrise-hour">${
-                data.forecast.forecastday[0].astro.sunrise.split(` `)[0]
-              }</span>
+              <span class="sunrise-hour">${sunriseHour.split(` `)[0]}</span>
             </div>
             <div class="sunset blur-border">
               <p class="sun-title">Sunset</p>
               <span class="sunset-hour">${twelveHoursToTwentyFour(
-                data.forecast.forecastday[0].astro.sunset.split(` `)[0]
+                sunsetHour.split(` `)[0]
               )}</span>
             </div>
           </div>
@@ -430,23 +429,24 @@ class ForecastCl extends CurrentWeatherCl {
     this._localDate = localDate;
     this.markUp = this._generateMarkUp(data);
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
+    this._calculateDate();
   }
   _clear() {
     this.parentEl.innerHTML = ` `;
   }
 
+  _calculateDate() {}
+
   _generateMarkUp(data) {
     return data.forecast.forecastday
       .filter((hour) => {
-        const forecastDate = new Date(hour.date).getDate();
-        if (this._localDate.getDate() < forecastDate) return hour;
+        const forecastDate = new Date(hour.date).getDay();
+        if (this._localDate.getDay() !== forecastDate) return hour;
       })
       .map((hour) => {
-        let forecastDate = new Date(hour.date).getDate();
+        let forecastDate = new Date(hour.date).getDay();
         return `<li class="forecast-list-item blur-border">
-            <div class="forecast-day">${
-              days[forecastDate === 6 ? (forecastDate = 0) : forecastDate + 1]
-            }</div>
+            <div class="forecast-day">${days[forecastDate]}</div>
             <div class="forecast-weather-details">
               <img
                 src="${hour.day.condition.icon}"
