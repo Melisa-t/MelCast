@@ -506,17 +506,21 @@ class StarredWeatherCl extends CurrentWeatherCl {
     let currentLoc;
     currentLoc = "";
     const location = e.target.closest(`.city-list-item`).dataset.location;
-    currentLoc = document.querySelector(`.city-country-location`).dataset
-      .currentLocation;
-    StarredWeather._getLocationData(currentLoc, location);
+    if (!document.querySelector(`.city-country-location`))
+      StarredWeather._getLocationData(currentLoc, location);
+
+    if (document.querySelector(`.city-country-location`)) {
+      currentLoc = document.querySelector(`.city-country-location`).dataset
+        .currentLocation;
+      StarredWeather._getLocationData(currentLoc, location);
+    }
   }
 
   async _getLocationData(currentLoc, location) {
-    if (currentLoc !== location) {
-      currentWeather._generateSpinner();
-      forecastCl._generateSpinner();
-      await SearchWeather.getLocationData(location);
-    }
+    if (currentLoc === location) return;
+    currentWeather._generateSpinner();
+    forecastCl._generateSpinner();
+    await SearchWeather.getLocationData(location);
   }
 
   loadStarred() {
