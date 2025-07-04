@@ -601,10 +601,12 @@ input:checked + .slider:before {
   align-items: center;
   padding: 1.5rem 2rem;
   gap: 1rem;
+  transition: all 0.2s;
 }
 
 .city-list-item:hover{
   cursor: pointer;
+  transform: translateY(-2%);
 }
 
 .star-city-conditions {

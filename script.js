@@ -366,7 +366,7 @@ class SearchWeatherCl extends CurrentWeatherCl {
 
   async getLocationData(query) {
     try {
-      if (query.trim().length === 0) return
+      if (query.trim().length === 0) return;
       const weatherData = await fetch(
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
       );
@@ -376,7 +376,7 @@ class SearchWeatherCl extends CurrentWeatherCl {
       const localDate = new Date(data.location.localtime);
       this._localDate = localDate;
       this._data = data;
-     
+
       this.render(this._data);
 
       forecastCl.render(this._data);
@@ -416,9 +416,11 @@ class ForecastCl extends CurrentWeatherCl {
         if (this._localDate.getDate() < forecastDate) return hour;
       })
       .map((hour) => {
-        const forecastDate = new Date(hour.date).getDate();
+        let forecastDate = new Date(hour.date).getDate();
         return `<li class="forecast-list-item blur-border">
-            <div class="forecast-day">${days[forecastDate + 1]}</div>
+            <div class="forecast-day">${
+              days[forecastDate === 6 ? (forecastDate = 0) : forecastDate + 1]
+            }</div>
             <div class="forecast-weather-details">
               <img
                 src="${hour.day.condition.icon}"
