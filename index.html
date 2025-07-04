@@ -7,7 +7,10 @@
     <title>MelCast</title>
     <link rel="shortcut icon" href="https://i.ibb.co/bRKryHLx/weather.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css" />
+
     <script type="module" defer src="script.js"></script>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script>
   </head>
   <body>
     <div class="container app-grid">
@@ -264,7 +267,9 @@
           </div>
         </div>
       </section>
-      <section class="map blur-border"></section>
+      <section class="map blur-border">
+         <div id="windy"></div>
+      </section>
       <section class="starred-cities blur-border">
         <h2 class="container-title">Starred Cities</h2>
         <div class="star-container">
@@ -474,6 +479,7 @@
         <span class="slider round"> </span>
       </label>
     </div>
+    <div class="created"><p>Created by <a class="created-link" href="https://github.com/Melisa-t" target="_blank">Melisa L.</a></p></div>
     <script
       type="module"
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
@@ -482,5 +488,6 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+
   </body>
 </html>
