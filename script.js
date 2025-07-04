@@ -637,8 +637,8 @@ const loadSearch = function () {
 
   searchForm.addEventListener(`submit`, async function () {
     searchQuery = document.querySelector(`#search-input`).value;
-    if (searchQuery.trim().length !== 0)
-      document.querySelector(`#search-input`).value = ` `;
+    if (searchQuery.trim().length === 0) return;
+    document.querySelector(`#search-input`).value = ` `;
     currentWeather._generateSpinner();
     forecastCl._generateSpinner();
     await SearchWeather.getLocationData(searchQuery);
@@ -692,8 +692,6 @@ switchBtn?.addEventListener("click", toggleTheme);
 // const starredContainer = document.querySelector(`.star-container`);
 // starredContainer.addEventListener(`click`, function (e) {
 //   if (!e.target.classList.contains(`.city-list-item`)) return;
-// console.log(`hi`);
-//   console.log(document.querySelector(`.star-title`).textContent);
 // });
 
 // if (navigator.geolocation) {
