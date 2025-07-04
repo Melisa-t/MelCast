@@ -235,7 +235,9 @@ class CurrentWeatherCl extends WeatherClass {
             <div class="location-box">
               <ion-icon class="location-img" name="location-outline"></ion-icon>
               <span>
-                <p class="city-country-location">${data.location.name}, ${
+                <p class="city-country-location" data-current-location="${
+                  data.location.name
+                } ${data.location.country}">${data.location.name}, ${
       data.location.country
     }</p>
                 <p class="date">${this._localDate
@@ -415,7 +417,8 @@ class ForecastCl extends CurrentWeatherCl {
     starredContainer.addEventListener(`click`, async function (e) {
       e.preventDefault();
       const location = e.target.closest(`.city-list-item`).dataset.location;
-      await SearchWeather.getLocationData(location);
+      const currentLocation = document.querySelector(`.city-country-location`).dataset.currentLocation
+      if (currentLocation !== location) await SearchWeather.getLocationData(location);
     });
   }
 
