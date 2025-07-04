@@ -91,9 +91,7 @@ class CurrentWeatherCl extends WeatherClass {
   render(data) {
     this._data = data;
     this._clear();
-    // this._generateSpinner();
     this.markUp = this._generateMarkUp(data);
-
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
     this._pushStarLocation(data);
   }
@@ -101,9 +99,16 @@ class CurrentWeatherCl extends WeatherClass {
     this.parentEl.innerHTML = ` `;
   }
 
-  // _generateSpinner() {
-
-  // }
+  _generateSpinner() {
+    this._clear();
+    const markup = `
+    <div class="loader-div">
+    <span class="loader"></span>
+    <p class="loading-text">Fetching Data...</p>
+    </div>
+    `;
+    this.parentEl.insertAdjacentHTML(`afterbegin`, markup);
+  }
 
   async getLocationData() {
     try {
@@ -378,7 +383,7 @@ class SearchWeatherCl extends CurrentWeatherCl {
       const localDate = new Date(data.location.localtime);
       this._localDate = localDate;
       this._data = data;
-
+      this._clear();
       this.render(this._data);
 
       forecastCl.render(this._data);
@@ -406,20 +411,9 @@ class ForecastCl extends CurrentWeatherCl {
     this._localDate = localDate;
     this.markUp = this._generateMarkUp(data);
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
-    this.changeCurrentWeatherOnClick();
   }
   _clear() {
     this.parentEl.innerHTML = ` `;
-  }
-
-  changeCurrentWeatherOnClick() {
-    const starredContainer = document.querySelector(`.star-container`);
-    starredContainer.addEventListener(`click`, async function (e) {
-      e.preventDefault();
-      const location = e.target.closest(`.city-list-item`).dataset.location;
-      const currentLocation = document.querySelector(`.city-country-location`).dataset.currentLocation
-      if (currentLocation !== location) await SearchWeather.getLocationData(location);
-    });
   }
 
   _generateMarkUp(data) {
@@ -509,6 +503,24 @@ class StarredWeatherCl extends CurrentWeatherCl {
   markUp;
   starred = [];
 
+  changeCurrentWeatherOnClick(e) {
+    e.preventDefault();
+    let currentLoc;
+    currentLoc = "";
+    const location = e.target.closest(`.city-list-item`).dataset.location;
+    currentLoc = document.querySelector(`.city-country-location`).dataset
+      .currentLocation;
+    StarredWeather._getLocationData(currentLoc, location);
+  }
+
+  async _getLocationData(currentLoc, location) {
+    if (currentLoc !== location) {
+      currentWeather._generateSpinner();
+      forecastCl._generateSpinner();
+      await SearchWeather.getLocationData(location);
+    }
+  }
+
   loadStarred() {
     let data = localStorage.getItem("starred");
     if (data) {
@@ -597,21 +609,25 @@ const loadSearch = function () {
     searchQuery = document.querySelector(`#search-input`).value;
     if (searchQuery.trim().length !== 0)
       document.querySelector(`#search-input`).value = ` `;
-    // currentWeather._generateSpinner();
+    currentWeather._generateSpinner();
+    forecastCl._generateSpinner();
     await SearchWeather.getLocationData(searchQuery);
     clickButtons();
   });
 };
 
 //to initialize everything
+const starredContainer = document.querySelector(`.star-container`);
 
 const init = async function () {
   StarredWeather.loadStarred();
-  // currentWeather._generateSpinner();
-  // currentWeather._
-  // ();
+  currentWeather._generateSpinner();
+  forecastCl._generateSpinner();
   await currentWeather.getLocationData();
-
+  starredContainer.addEventListener(
+    `click`,
+    StarredWeather.changeCurrentWeatherOnClick
+  );
   clickButtons();
   loadSearch();
 };
