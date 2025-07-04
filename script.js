@@ -649,6 +649,7 @@ const toggleTheme = () => {
 };
 
 const savedTheme = localStorage.getItem("theme");
+
 if (savedTheme) {
   applyTheme(savedTheme);
 } else {
