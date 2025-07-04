@@ -343,7 +343,7 @@ class CurrentWeatherCl extends WeatherClass {
                 <span class="min-temp">${parseInt(
                   data.forecast.forecastday[0].day.mintemp_c
                 )}</span>
-                <span class="temperature-unit">°C</span> /
+                <span class="temperature-unit">°C</span> <span class="separator">/</span>
                 <span class="max-temp">${parseInt(
                   data.forecast.forecastday[0].day.maxtemp_c
                 )}</span>

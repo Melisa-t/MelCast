@@ -621,10 +621,21 @@ input:checked + .slider:before {
   align-items: center;
 }
 
+.forecast-wind-condition p,
+.forecast-minmax p,
+.forecast-precipitation-condition p,
+.forecast-uv-condition p{
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 0.1rem;
+}
 .container-title {
   font-size: 2.4rem;
 }
-
+.separator{
+  font-size: 1.6rem;
+}
 .forecast-weather-conditions p {
   font-size: 1rem;
 }
