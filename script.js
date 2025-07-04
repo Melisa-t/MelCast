@@ -404,9 +404,19 @@ class ForecastCl extends CurrentWeatherCl {
     this._localDate = localDate;
     this.markUp = this._generateMarkUp(data);
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
+    this.changeCurrentWeatherOnClick();
   }
   _clear() {
     this.parentEl.innerHTML = ` `;
+  }
+
+  changeCurrentWeatherOnClick() {
+    const starredContainer = document.querySelector(`.star-container`);
+    starredContainer.addEventListener(`click`, async function (e) {
+      e.preventDefault();
+      const location = e.target.closest(`.city-list-item`).dataset.location;
+      await SearchWeather.getLocationData(location);
+    });
   }
 
   _generateMarkUp(data) {
@@ -535,7 +545,9 @@ class StarredWeatherCl extends CurrentWeatherCl {
     return data
       .map(
         (data) =>
-          `<li class="city-list-item blur-border">
+          `<li class="city-list-item blur-border" data-location="${
+            data.location.name
+          } ${data.location.country}">
       <p class="star-title"><span>${data.location.name}</span><span>${
             data.location.country
           }</span></p>
@@ -580,9 +592,9 @@ const loadSearch = function () {
 
   searchForm.addEventListener(`submit`, async function () {
     searchQuery = document.querySelector(`#search-input`).value;
-    document.querySelector(`#search-input`).value = ` `;
+    if (searchQuery.trim().length !== 0)
+      document.querySelector(`#search-input`).value = ` `;
     // currentWeather._generateSpinner();
-    if (!searchQuery) return;
     await SearchWeather.getLocationData(searchQuery);
     clickButtons();
   });
