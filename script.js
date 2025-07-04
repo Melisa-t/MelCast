@@ -366,12 +366,11 @@ class SearchWeatherCl extends CurrentWeatherCl {
 
   async getLocationData(query) {
     try {
-      if (query = ` `) return
+      if (query.trim().length === 0) return
       const weatherData = await fetch(
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
       );
       const data = await weatherData.json();
-
       if (!weatherData.ok) throw new Error(`${data.error.message}`);
 
       const localDate = new Date(data.location.localtime);
