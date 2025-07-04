@@ -116,10 +116,8 @@ class CurrentWeatherCl extends WeatherClass {
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
       );
 
-      if (!weatherData.ok)
-        throw new Error(`Failed to fetch weather data, check your connection!`);
       const data = await weatherData.json();
-
+      if (!weatherData.ok) throw new Error(`${data.error.message}`);
       const localDate = new Date(data.location.localtime);
       this._localDate = localDate;
       this._data = data;
