@@ -77,16 +77,6 @@ class WeatherClass {
     this.parentEl.innerHTML = ` `;
   }
 
-  _generateSpinner() {
-    const markup = `
-     <div class="loader-div">
-     <div class="loader"></div>
-     <span class="loader-text"> Fetching Data</span>
-     </div>`;
-    this._clear();
-    this.parentEl.insertAdjacentHTML(`afterbegin`, markup);
-  }
-
   _generateMarkUp(data) {
     return ``;
   }
@@ -99,9 +89,11 @@ class CurrentWeatherCl extends WeatherClass {
   _localDate;
 
   render(data) {
-    this._clear();
     this._data = data;
+    this._clear();
+    // this._generateSpinner();
     this.markUp = this._generateMarkUp(data);
+
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
     this._pushStarLocation(data);
   }
@@ -109,11 +101,18 @@ class CurrentWeatherCl extends WeatherClass {
     this.parentEl.innerHTML = ` `;
   }
 
+  // _generateSpinner() {
+
+  // }
+
   async getLocationData() {
     try {
       const weatherData = await fetch(
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
       );
+
+      if (!weatherData.ok)
+        throw new Error(`Failed to fetch weather data, check your connection!`);
       const data = await weatherData.json();
 
       const localDate = new Date(data.location.localtime);
@@ -122,28 +121,13 @@ class CurrentWeatherCl extends WeatherClass {
       this.render(this._data);
       this.forecastHourArranger(this._data);
       forecastCl.render(this._data);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      this._clear();
+      this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
+      forecastCl.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
+      this.parentEl.style.height = `530px`;
     }
   }
-
-  _renderErrorMessage = function (err) {
-    const markup = `
-    
-    <div class="modal-content">
-  <div class="modal-header">
-    <span class="close">&times;</span>
-    <h2>Modal Header</h2>
-  </div>
-  <div class="modal-body">
-    <p>Error! ${err.message}</p>
-    <p>Some other text...</p>
-  </div>
-  <div class="modal-footer">
-    <h3>Modal Footer</h3>
-  </div>
-</div>`;
-  };
 
   forecastHourArranger = function (data) {
     const firstDayHours = data.forecast.forecastday[0].hour
@@ -237,7 +221,6 @@ class CurrentWeatherCl extends WeatherClass {
       } else {
         // Star
         StarredWeather.starred.push(data);
-        console.log(StarredWeather.starred);
         StarredWeather.renderStarredLocation(data);
         starIcon.src = "https://i.ibb.co/0y1wchP7/star-fill.png";
       }
@@ -383,22 +366,26 @@ class SearchWeatherCl extends CurrentWeatherCl {
 
   async getLocationData(query) {
     try {
+      if (query = ` `) return
       const weatherData = await fetch(
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
       );
-
-      if (!weatherData.response.ok) throw err;
       const data = await weatherData.json();
+
+      if (!weatherData.ok) throw new Error(`${data.error.message}`);
+
       const localDate = new Date(data.location.localtime);
       this._localDate = localDate;
       this._data = data;
-
+     
       this.render(this._data);
 
       forecastCl.render(this._data);
-      console.log(weatherData, data);
     } catch (err) {
-      console.log(`hihi, ${err.message}`);
+      this._clear();
+      this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
+      forecastCl.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
+      this.parentEl.style.height = `530px`;
     }
   }
 }
@@ -510,7 +497,6 @@ class StarredWeatherCl extends CurrentWeatherCl {
 
   loadStarred() {
     let data = localStorage.getItem("starred");
-    console.dir(data);
     if (data) {
       this.starred = JSON.parse(data);
       this.starred.forEach((location) => {
@@ -520,7 +506,6 @@ class StarredWeatherCl extends CurrentWeatherCl {
     if (this.starred.length === 0) {
       const markup = `<p class="star-text">No starred cities found! </p>
 `;
-      console.log(`test`);
       this.parentEl.insertAdjacentHTML("afterbegin", markup);
     }
   }
@@ -576,7 +561,6 @@ class StarredWeatherCl extends CurrentWeatherCl {
 
 const StarredWeather = new StarredWeatherCl();
 
-console.log(StarredWeather);
 // function for converting 12h to 24h time
 
 const twelveHoursToTwentyFour = function (time) {
@@ -596,8 +580,8 @@ const loadSearch = function () {
   searchForm.addEventListener(`submit`, async function () {
     searchQuery = document.querySelector(`#search-input`).value;
     document.querySelector(`#search-input`).value = ` `;
-    forecastCl._generateSpinner();
-    SearchWeather._generateSpinner();
+    // currentWeather._generateSpinner();
+    if (!searchQuery) return;
     await SearchWeather.getLocationData(searchQuery);
     clickButtons();
   });
@@ -607,8 +591,9 @@ const loadSearch = function () {
 
 const init = async function () {
   StarredWeather.loadStarred();
-  forecastCl._generateSpinner();
-  currentWeather._generateSpinner();
+  // currentWeather._generateSpinner();
+  // currentWeather._
+  // ();
   await currentWeather.getLocationData();
 
   clickButtons();
@@ -642,3 +627,10 @@ if (savedTheme) {
 }
 
 switchBtn?.addEventListener("click", toggleTheme);
+
+// const starredContainer = document.querySelector(`.star-container`);
+// starredContainer.addEventListener(`click`, function (e) {
+//   if (!e.target.classList.contains(`.city-list-item`)) return;
+// console.log(`hi`);
+//   console.log(document.querySelector(`.star-title`).textContent);
+// });
