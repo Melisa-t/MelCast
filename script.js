@@ -1,4 +1,3 @@
-import StarredWeather from "./modules/starredWeather.js";
 import searchWeather from "./modules/searchWeather.js";
 import { currentWeather } from "./modules/currentWeather.js";
 import forecastWeather from "./modules/forecastWeather.js";
