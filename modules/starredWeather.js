@@ -1,5 +1,5 @@
 import { clickButtons } from "../script.js";
-import CurrentWeather, { currentWeather } from "./currentWeather.js";
+import CurrentWeather  from "./currentWeather.js";
 
 class StarredWeather extends CurrentWeather {
   _data;

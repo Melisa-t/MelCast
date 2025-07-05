@@ -1,7 +1,6 @@
 import CurrentWeather from "./currentWeather.js";
 import { API_KEY } from "../config.js";
 import { clickButtons } from "../script.js";
-import forecastWeather from "./forecastWeather.js";
 
 class SearchWeather extends CurrentWeather {
   _data;

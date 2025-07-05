@@ -1,6 +1,6 @@
 import StarredWeather from "./modules/starredWeather.js";
 import searchWeather from "./modules/searchWeather.js";
-import CurrentWeather, { currentWeather } from "./modules/currentWeather.js";
+import { currentWeather } from "./modules/currentWeather.js";
 import forecastWeather from "./modules/forecastWeather.js";
 import starredWeather from "./modules/starredWeather.js";
 
@@ -133,7 +133,6 @@ const loadSearch = function () {
 
 const changeCurrentWeatherOnClick = async function (e) {
   e.preventDefault();
-  let currentLoc = "";
   if (
     !e.currentTarget === starContainer ||
     e.target === document.querySelector(`.btn--up`) ||
@@ -144,8 +143,6 @@ const changeCurrentWeatherOnClick = async function (e) {
   const location = e.target.closest(`.city-list-item`)?.dataset?.id;
   if (document.querySelector(`.city-country-location`)) {
     {
-      currentLoc = document.querySelector(`.city-country-location`).dataset
-        .cityid;
       const renderedCurrentData = starredWeather.starred.find(
         (data) => data.starId === location
       );
