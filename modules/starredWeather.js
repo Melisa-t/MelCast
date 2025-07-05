@@ -100,7 +100,7 @@ class StarredWeather extends CurrentWeather {
           class="star-weather"
           width="48"
           height="48"
-          src="${conditionIcon}"
+          src="https:${conditionIcon}"
           alt="${conditionText}"
         />
         <p class="star-city-degree">

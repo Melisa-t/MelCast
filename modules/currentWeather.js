@@ -101,7 +101,7 @@ export default class CurrentWeather {
         return `<li class="hourly-forecast blur-border">
                 <p class="hour">${time}</p>
                 <img
-                  src="${conditionIcon}"
+                  src="https:${conditionIcon}"
                   class="hourly-img"
                   alt=""
                   class="hourly-condition"
@@ -126,7 +126,7 @@ export default class CurrentWeather {
         return `<li class="hourly-forecast blur-border">
                 <p class="hour">${time}</p>
                 <img
-                  src="${conditionIcon}"
+                  src="https:${conditionIcon}"
                   class="hourly-img"
                   alt=""
                   class="hourly-condition"
@@ -199,7 +199,7 @@ export default class CurrentWeather {
           </div>
           <div class="weather-container">
             <img
-              src=${conditionIcon}
+              src="https:${conditionIcon}"
               alt=""
               class="weather-logo"
             />

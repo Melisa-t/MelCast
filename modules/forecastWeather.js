@@ -40,7 +40,7 @@ class Forecast extends CurrentWeather {
             <div class="forecast-day">${days[forecastDate]}</div>
             <div class="forecast-weather-details">
               <img
-                src="${conditionIcon}"
+                src="https:${conditionIcon}"
                 alt="${conditionText}"
                 class="forecast-logo"
               />
