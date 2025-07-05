@@ -44,8 +44,8 @@ export default class CurrentWeather {
     windyInit(
       {
         key: `${WINDY_KEY}`,
-        lat: `${data.location.lat}`,
-        lon: `${data.location.lon}`,
+        lat: `${data?.location?.lat || 51.477928}`,
+        lon: `${data?.location?.lon || 0}`,
         zoom: 6,
       },
       (windyAPI) => {
@@ -119,20 +119,22 @@ export default class CurrentWeather {
         if (hoursForecastHour.getHours() < +6) return hours;
       })
       .map((hour) => {
+        const time = hour?.time.split(` `)[1] || `Null`;
+        const conditionIcon = hour?.condition?.icon || `Unknown`;
+        const temp = hour?.temp_c || 0;
+        const chanceOfRain = hour?.chance_of_rain || 0;
         return `<li class="hourly-forecast blur-border">
-                <p class="hour">${hour.time.split(` `)[1]}</p>
+                <p class="hour">${time}</p>
                 <img
-                  src="${hour.condition.icon}"
+                  src="${conditionIcon}"
                   class="hourly-img"
                   alt=""
                   class="hourly-condition"
                 />
                 <p class="hour-degree">
-                  ${parseInt(
-                    hour.temp_c
-                  )} <span class="temperature-unit">°C</span>
+                  ${parseInt(temp)} <span class="temperature-unit">°C</span>
                 </p>
-                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
+                <p class="hour-precipitation">${chanceOfRain}%</p>
               </li>`;
       })
       .join(``);

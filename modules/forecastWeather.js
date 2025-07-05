@@ -28,22 +28,30 @@ class Forecast extends CurrentWeather {
       })
       .map((hour) => {
         let forecastDate = new Date(hour.date).getDay();
+        const conditionIcon = hour?.day?.condition?.icon || `Unknown`;
+        const conditionText = hour?.day?.condition?.text || `Unknown`;
+        const avgTemp = hour?.day?.avgtemp_c || 0;
+        const maxWind = hour?.day?.maxwind_kph || 0;
+        const chanceOfRain =  hour?.day?.daily_chance_of_rain || 0;
+        const uvIndex = hour?.day?.uv || 0;
+        const minTemp = hour?.day?.mintemp_c || 0;
+        const maxTemp = hour?.day?.maxtemp_c || 0;
         return `<li class="forecast-list-item blur-border">
             <div class="forecast-day">${days[forecastDate]}</div>
             <div class="forecast-weather-details">
               <img
-                src="${hour.day.condition.icon}"
-                alt="${hour.day.condition.text}"
+                src="${conditionIcon}"
+                alt="${conditionText}"
                 class="forecast-logo"
               />
               <p class="forecast-temperature">
                 <span class="forecast-temperature-degree">${parseInt(
-                  hour.day.avgtemp_c
+                  avgTemp
                 )}</span
                 ><span class="temperature-unit">°C</span>
               </p>
               <p class="forecast-temperature-condition">${
-                hour.day.condition.text
+                conditionText
               }</p>
             </div>
             <div class="forecast-weather-conditions blur-border">
@@ -54,7 +62,7 @@ class Forecast extends CurrentWeather {
                   alt=""
                 />
                 <p><span class="forecast-wind">${parseInt(
-                  hour.day.maxwind_kph
+                  maxWind
                 )}</span> km/h</p>
               </div>
               <div class="forecast-precipitation-condition">
@@ -64,7 +72,7 @@ class Forecast extends CurrentWeather {
                   alt=""
                 />
                 <p><span class="forecast-precipitation">${
-                  hour.day.daily_chance_of_rain
+                 chanceOfRain
                 }</span>%</p>
               </div>
               <div class="forecast-uv-condition">
@@ -74,18 +82,18 @@ class Forecast extends CurrentWeather {
                   src="https://i.ibb.co/B5cx5BY0/protect.png"
                   alt=""
                 />
-                <p><span class="uv-index">${parseInt(hour.day.uv)}</span></p>
+                <p><span class="uv-index">${parseInt(uvIndex)}</span></p>
               </div>
               <div class="forecast-minmax">
                 <p>
                   Min: <span class="forecast-min-temp">${parseInt(
-                    hour.day.mintemp_c
+                    minTemp
                   )}</span>
                   <span class="temperature-unit">°C</span>
                 </p>
                 <p>
                   Max: <span class="forecast-max-temp">${parseInt(
-                    hour.day.maxtemp_c
+                    maxTemp
                   )}</span>
                   <span class="temperature-unit">°C</span>
                 </p>

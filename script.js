@@ -212,35 +212,3 @@ if (savedTheme) {
 
 switchBtn?.addEventListener("click", toggleTheme);
 
-// const starredContainer = document.querySelector(`.star-container`);
-// starredContainer.addEventListener(`click`, function (e) {
-//   if (!e.target.classList.contains(`.city-list-item`)) return;
-// });
-
-// if (navigator.geolocation) {
-//   navigator.geolocation.getCurrentPosition(
-//     function success(position) {
-//       const { latitude } = position.coords;
-//       const { longitude } = position.coords;
-//       const coords = [latitude, longitude];
-//       windyInit(
-//         {
-//           key: `${WINDY_KEY}`,
-//           lat: `${coords[0]}`,
-//           lon: `${coords[1]}`,
-//           zoom: 6,
-//         },
-//         (windyAPI) => {
-//           const { store } = windyAPI;
-//           // All the params are stored in windyAPI.store
-//           store.set(`overlay`, `temp`);
-//           const { map } = windyAPI;
-//           // .map is instance of Leaflet map
-//         }
-//       );
-//     },
-//     function () {
-//       alert("Could not get your position");
-//     }
-//   );
-// }
