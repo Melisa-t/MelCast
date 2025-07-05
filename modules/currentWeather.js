@@ -19,7 +19,7 @@ export default class CurrentWeather {
     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
     clickButtons();
 
-    // this._createWindyMap(data);
+    this._createWindyMap(data);
   }
 
   createCityId(name, country, lat, lon) {
@@ -46,7 +46,7 @@ export default class CurrentWeather {
         key: `${WINDY_KEY}`,
         lat: `${data?.location?.lat || 51.477928}`,
         lon: `${data?.location?.lon || 0}`,
-        zoom: 6,
+        zoom: 8,
       },
       (windyAPI) => {
         const { store } = windyAPI;
