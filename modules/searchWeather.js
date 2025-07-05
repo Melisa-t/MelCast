@@ -30,8 +30,8 @@ class SearchWeather extends CurrentWeather {
       const data = await weatherData.json();
       if (!weatherData.ok) throw new Error(`${data.error.message}`);
       return data;
-    } catch (err) { throw new Error (`${err.message}`)
-
+    } catch (err) {
+      throw new Error(`${err.message}`);
     }
   }
 }
