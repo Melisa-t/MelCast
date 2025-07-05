@@ -1,6 +1,10 @@
-import { API_KEY, WINDY_KEY } from "./config.js";
+import StarredWeather from "./modules/starredWeather.js";
+import searchWeather from "./modules/searchWeather.js";
+import CurrentWeather, { currentWeather } from "./modules/currentWeather.js";
+import forecastWeather from "./modules/forecastWeather.js";
+import starredWeather from "./modules/starredWeather.js";
 
-const days = [
+export const days = [
   "Sunday",
   "Monday",
   "Tuesday",
@@ -10,7 +14,7 @@ const days = [
   "Saturday",
 ];
 
-const clickButtons = function () {
+export const clickButtons = function () {
   // ✅ SCROLLING IN HOURLY FORECAST AND STARRED CITIES
   const rightBtn = document.querySelector(`.btn--right`);
   const lefttBtn = document.querySelector(`.btn--left`);
@@ -60,571 +64,40 @@ const clickButtons = function () {
   downBtn?.addEventListener(`click`, changeDownList);
 };
 
-//  API FETCH
-
-// class WeatherClass {
-//   _data;
-//   parentEl;
-//   markUp;
-
-//   render(data) {
-//     this._clear();
-//     this.markUp = this._generateMarkUp(data);
-//     this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
-//   }
-//   _clear() {
-//     this.parentEl.innerHTML = ` `;
-//   }
-
-//   _generateMarkUp(data) {
-//     return ``;
-//   }
-// }
-
-class CurrentWeatherCl {
-  _data;
-  parentEl = document.querySelector(`.content`);
-  markUp;
-  _localDate;
-
-  render(data) {
-    this._data = data;
-    this._clear();
-    this.markUp = this._generateMarkUp(data);
-    this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
-    this._pushStarLocation(data);
-    this._createWindyMap(data);
-  }
-
-  // TO MOVE THE MAP TO STARRED LOCATION
-  _createWindyMap(data) {
-    windyInit(
-      {
-        key: `${WINDY_KEY}`,
-        lat: `${data.location.lat}`,
-        lon: `${data.location.lon}`,
-        zoom: 6,
-      },
-      (windyAPI) => {
-        const { store } = windyAPI;
-        // All the params are stored in windyAPI.store
-        store.set(`overlay`, `temp`);
-        const { map } = windyAPI;
-        // .map is instance of Leaflet map
-      }
-    );
-  }
-  _clear() {
-    this.parentEl.innerHTML = ` `;
-  }
-
-  _generateSpinner() {
-    this._clear();
-    const markup = `
-    <div class="loader-div">
-    <span class="loader"></span>
-    <p class="loading-text">Fetching Data...</p>
-    </div>
-    `;
-    this.parentEl.insertAdjacentHTML(`afterbegin`, markup);
-  }
-
-  async getLocationData() {
-    try {
-      const weatherData = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
-      );
-
-      const data = await weatherData.json();
-      if (!weatherData.ok) throw new Error(`${data.error.message}`);
-      const localDate = new Date(data.location.localtime);
-      this._localDate = localDate;
-      this._data = data;
-      this.render(this._data);
-      this.forecastHourArranger(this._data);
-      forecastCl.render(this._data);
-      clickButtons();
-    } catch (err) {
-      this._clear();
-      this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      forecastCl.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      this.parentEl.style.height = `530px`;
-    }
-  }
-
-  forecastHourArranger = function (data) {
-    const firstDayHours = data.forecast.forecastday[0].hour
-      .filter((hours) => {
-        const hoursForecastHour = new Date(hours.time);
-        if (hoursForecastHour.getHours() >= this._localDate.getHours())
-          return hours;
-      })
-      .map((hour) => {
-        return `<li class="hourly-forecast blur-border">
-                <p class="hour">${hour.time.split(` `)[1]}</p>
-                <img
-                  src="${hour.condition.icon}"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  ${parseInt(
-                    hour.temp_c
-                  )} <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
-              </li>`;
-      })
-      .join(``);
-    const secondDayHours = data.forecast.forecastday[1].hour
-      .filter((hours) => {
-        const hoursForecastHour = new Date(hours.time);
-        if (hoursForecastHour.getHours() < +6) return hours;
-      })
-      .map((hour) => {
-        return `<li class="hourly-forecast blur-border">
-                <p class="hour">${hour.time.split(` `)[1]}</p>
-                <img
-                  src="${hour.condition.icon}"
-                  class="hourly-img"
-                  alt=""
-                  class="hourly-condition"
-                />
-                <p class="hour-degree">
-                  ${parseInt(
-                    hour.temp_c
-                  )} <span class="temperature-unit">°C</span>
-                </p>
-                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
-              </li>`;
-      })
-      .join(``);
-    const finalHoursList = firstDayHours.concat(secondDayHours);
-    return finalHoursList;
-  };
-
-  _pushStarLocation(data) {
-    const starIcon = document.querySelector(`.star`);
-
-    const isStarred = StarredWeather.starred.some(
-      (loc) =>
-        loc.location.name === data.location.name &&
-        loc.location.country === data.location.country
-    );
-
-    // Initial icon setup
-    starIcon.src = isStarred
-      ? "https://i.ibb.co/0y1wchP7/star-fill.png"
-      : "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
-
-    starIcon.addEventListener(`click`, function () {
-      const index = StarredWeather.starred.findIndex(
-        (loc) =>
-          loc.location.name === data.location.name &&
-          loc.location.country === data.location.country
-      );
-
-      if (index > -1) {
-        // Unstar
-        StarredWeather.starred.splice(index, 1);
-        StarredWeather.keepStarred();
-        // Remove city from markup
-        const cityItems = document.querySelectorAll(".city-list-item");
-        cityItems.forEach((item) => {
-          if (
-            item.textContent.includes(data.location.name) &&
-            item.textContent.includes(data.location.country)
-          ) {
-            item.remove();
-          }
-        });
-        starIcon.src = "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
-        StarredWeather.loadStarred();
-      } else {
-        // Star
-        StarredWeather.starred.push(data);
-        StarredWeather.renderStarredLocation(data);
-        starIcon.src = "https://i.ibb.co/0y1wchP7/star-fill.png";
-      }
-      StarredWeather.keepStarred();
-    });
-  }
-
-  _generateMarkUp(data) {
-    const name = data?.location?.name || `Unknown`;
-    const country = data?.location?.country || `Unknown`;
-    const airQuality = data?.current?.air_quality || 0;
-    const conditionIcon = data?.current?.condition?.icon || `Condition Image`;
-    const currentTemp = data?.current?.temp_c || 0;
-    const conditionText = data?.current?.condition?.text || `Unknown`;
-    const windSpeed = data?.current?.wind_kph || 0;
-    const chanceOfRain =
-      data?.forecast?.forecastday[0]?.day?.daily_chance_of_rain || 0;
-    const uvIndex = data?.current?.uv || 0;
-    const feelsLike = data?.current?.feelslike_c || 0;
-    const minTemp = data?.forecast?.forecastday[0]?.day?.mintemp_c || 0;
-    const maxTemp = data?.forecast?.forecastday[0]?.day?.maxtemp_c || 0;
-    const sunriseHour =
-      data?.forecast?.forecastday[0]?.astro.sunrise || `Unknown`;
-    const sunsetHour =
-      data?.forecast?.forecastday[0]?.astro.sunset || `Unknown`;
-    return `
-          <div class="location-container">
-            <div class="location-box">
-              <ion-icon class="location-img" name="location-outline"></ion-icon>
-              <span>
-                <p class="city-country-location" data-current-location="${name} ${country}">${name}, ${country}</p>
-                <p class="date">${this._localDate
-                  .getDate()
-                  .toString()
-                  .padStart(2, 0)}/${(this._localDate.getMonth() + 1)
-      .toString()
-      .padStart(2, 0)}/${this._localDate.getFullYear()} ${this._localDate
-      .getHours()
-      .toString()
-      .padStart(2, 0)}:${this._localDate
-      .getMinutes()
-      .toString()
-      .padStart(2, 0)}</p>
-              </span>
-            </div>
-
-             <div class="star-air">
-              <img class="star" src="https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png" alt="">
-              <p class="air-quality">
-                Air Quality: <span class="air-quality-score">${
-                  airQuality["us-epa-index"]
-                }</span>
-              </p>
-              <!-- <ion-icon name="star"></ion-icon>  -->
-            </div>
-          </div>
-          <div class="weather-container">
-            <img
-              src=${conditionIcon}
-              alt=""
-              class="weather-logo"
-            />
-            <p class="temperature">
-              <span class="temperature-degree">${parseInt(currentTemp)}</span
-              ><span class="temperature-unit">°C</span>
-            </p>
-            <p class="temperature-condition">${conditionText}</p>
-          </div>
-          <div class="weather-conditions blur-border">
-            <div class="wind-condition">
-              <img
-                class="condition-icon"
-                src="https://img.icons8.com/?size=100&id=pLiaaoa41R9n&format=png&color=000000"
-                alt=""
-              />
-              <p><span class="wind">${parseInt(windSpeed)}</span> km/h</p>
-            </div>
-            <div class="precipitation-condition">
-              <img
-                class="condition-icon"
-                src="https://img.icons8.com/?size=100&id=15362&format=png&color=000000"
-                alt=""
-              />
-              <p><span class="precipitation">${chanceOfRain}</span>%</p>
-            </div>
-            <div class="uv-condition">
-              <img
-                class="condition-icon"
-                src="https://i.ibb.co/B5cx5BY0/protect.png"
-                alt=""
-              />
-              <p><span class="uv-index">${parseInt(uvIndex)}</span></p>
-            </div>
-            <div class="feels-minmax">
-              <p>
-                Feels like: <span class="feels-like">${parseInt(
-                  feelsLike
-                )}</span>
-                <span class="temperature-unit">°C</span>
-              </p>
-              <p>
-                <span class="min-temp">${parseInt(minTemp)}</span>
-                <span class="temperature-unit">°C</span> <span class="separator">/</span>
-                <span class="max-temp">${parseInt(maxTemp)}</span>
-                <span class="temperature-unit">°C</span>
-              </p>
-            </div>
-          </div>
-          <div class="hours-forecast">
-            <ul class="forecast-list">
-          
-          ${this.forecastHourArranger(data)}
-            </ul>
-            <ion-icon
-              class="btn btn--left"
-              name="chevron-back-outline"
-            ></ion-icon>
-            <ion-icon
-              class="btn btn--right"
-              name="chevron-forward-outline"
-            ></ion-icon>
-          </div>
-          <div class="sunrise-sunset-container">
-            <div class="sunrise blur-border">
-              <p class="sun-title">Sunrise</p>
-              <span class="sunrise-hour">${sunriseHour.split(` `)[0]}</span>
-            </div>
-            <div class="sunset blur-border">
-              <p class="sun-title">Sunset</p>
-              <span class="sunset-hour">${twelveHoursToTwentyFour(
-                sunsetHour.split(` `)[0]
-              )}</span>
-            </div>
-          </div>
-`;
-  }
-}
-
-const currentWeather = new CurrentWeatherCl();
-
-class SearchWeatherCl extends CurrentWeatherCl {
-  _data;
-  parentEl = document.querySelector(`.content`);
-  markUp;
-
-  async getLocationData(query) {
-    try {
-      if (query.trim().length === 0) return;
-      const weatherData = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
-      );
-      const data = await weatherData.json();
-      if (!weatherData.ok) throw new Error(`${data.error.message}`);
-
-      const localDate = new Date(data.location.localtime);
-      this._localDate = localDate;
-      this._data = data;
-      this._clear();
-      this.render(this._data);
-      forecastCl.render(this._data);
-      clickButtons();
-    } catch (err) {
-      this._clear();
-      this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      forecastCl.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      this.parentEl.style.height = `530px`;
-    }
-  }
-}
-
-const SearchWeather = new SearchWeatherCl();
-
-class ForecastCl extends CurrentWeatherCl {
-  _data;
-  parentEl = document.querySelector(`.daily-forecast`);
-  markUp;
-  _localDate;
-
-  render(data) {
-    this._clear();
-    this._data = data;
-    const localDate = new Date(data.location.localtime);
-    this._localDate = localDate;
-    this.markUp = this._generateMarkUp(data);
-    this.parentEl.insertAdjacentHTML(`afterbegin`, this.markUp);
-    this._calculateDate();
-  }
-  _clear() {
-    this.parentEl.innerHTML = ` `;
-  }
-
-  _calculateDate() {}
-
-  _generateMarkUp(data) {
-    return data.forecast.forecastday
-      .filter((hour) => {
-        const forecastDate = new Date(hour.date).getDay();
-        if (this._localDate.getDay() !== forecastDate) return hour;
-      })
-      .map((hour) => {
-        let forecastDate = new Date(hour.date).getDay();
-        return `<li class="forecast-list-item blur-border">
-            <div class="forecast-day">${days[forecastDate]}</div>
-            <div class="forecast-weather-details">
-              <img
-                src="${hour.day.condition.icon}"
-                alt="${hour.day.condition.text}"
-                class="forecast-logo"
-              />
-              <p class="forecast-temperature">
-                <span class="forecast-temperature-degree">${parseInt(
-                  hour.day.avgtemp_c
-                )}</span
-                ><span class="temperature-unit">°C</span>
-              </p>
-              <p class="forecast-temperature-condition">${
-                hour.day.condition.text
-              }</p>
-            </div>
-            <div class="forecast-weather-conditions blur-border">
-              <div class="forecast-wind-condition">
-                <img
-                  class="forecast-condition-icon"
-                  src="https://img.icons8.com/?size=100&id=pLiaaoa41R9n&format=png&color=000000"
-                  alt=""
-                />
-                <p><span class="forecast-wind">${parseInt(
-                  hour.day.maxwind_kph
-                )}</span> km/h</p>
-              </div>
-              <div class="forecast-precipitation-condition">
-                <img
-                  class="forecast-condition-icon"
-                  src="https://img.icons8.com/?size=100&id=15362&format=png&color=000000"
-                  alt=""
-                />
-                <p><span class="forecast-precipitation">${
-                  hour.day.daily_chance_of_rain
-                }</span>%</p>
-              </div>
-              <div class="forecast-uv-condition">
-              
-                <img
-                  class="forecast-condition-icon"
-                  src="https://i.ibb.co/B5cx5BY0/protect.png"
-                  alt=""
-                />
-                <p><span class="uv-index">${parseInt(hour.day.uv)}</span></p>
-              </div>
-              <div class="forecast-minmax">
-                <p>
-                  Min: <span class="forecast-min-temp">${parseInt(
-                    hour.day.mintemp_c
-                  )}</span>
-                  <span class="temperature-unit">°C</span>
-                </p>
-                <p>
-                  Max: <span class="forecast-max-temp">${parseInt(
-                    hour.day.maxtemp_c
-                  )}</span>
-                  <span class="temperature-unit">°C</span>
-                </p>
-              </div>
-            </div>
-          </li>`;
-      })
-      .join(` `);
-  }
-}
-
-const forecastCl = new ForecastCl();
-
-class StarredWeatherCl extends CurrentWeatherCl {
-  _data;
-  parentEl = document.querySelector(`.city-list`);
-  markUp;
-  starred = [];
-
-  changeCurrentWeatherOnClick(e) {
-    e.preventDefault();
-    let currentLoc;
-    currentLoc = "";
-    if (
-      !e.target.classList.contains(`city-list`) &&
-      (e.target === document.querySelector(`.btn--up`) ||
-        e.target === document.querySelector(`.btn--down`))
-    )
-      return;
-
-    const location = e.target.closest(`.city-list-item`).dataset.location;
-    if (!document.querySelector(`.city-country-location`))
-      StarredWeather._getLocationData(currentLoc, location);
-
-    if (document.querySelector(`.city-country-location`)) {
-      currentLoc = document.querySelector(`.city-country-location`).dataset
-        .currentLocation;
-      StarredWeather._getLocationData(currentLoc, location);
-    }
-  }
-
-  async _getLocationData(currentLoc, location) {
-    if (currentLoc === location) return;
-    currentWeather._generateSpinner();
-    forecastCl._generateSpinner();
-    await SearchWeather.getLocationData(location);
-  }
-
-  loadStarred() {
-    let data = localStorage.getItem("starred");
-    if (data) {
-      this.starred = JSON.parse(data);
-      this.starred.forEach((location) => {
-        this.renderStarredLocation(location);
-      });
-    }
-    if (this.starred.length === 0) {
-      const markup = `<p class="star-text">No starred cities found! </p>
-`;
-      this.parentEl.insertAdjacentHTML("afterbegin", markup);
-    }
-  }
-
-  renderStarredLocation(data) {
-    const exists = [...this.parentEl.querySelectorAll(".city-list-item")].some(
-      (el) => el.textContent.includes(data.location.name)
-    );
-    if (exists) return;
-    this._clear();
-    const markup = this._generateMarkUp(this.starred);
-    this.parentEl.insertAdjacentHTML("beforeend", markup);
-  }
-
-  keepStarred() {
-    localStorage.setItem("starred", JSON.stringify(this.starred));
-  }
-
-  addStar(data) {
-    this.starred.push(data);
-    data.bookmarked = true;
-    this.keepStarred();
-  }
-
-  _generateMarkUp(data) {
-    return data
-      .map(
-        (data) =>
-          `<li class="city-list-item blur-border" data-location="${
-            data.location.name
-          } ${data.location.country}">
-      <p class="star-title"><span>${data.location.name}</span><span>${
-            data.location.country
-          }</span></p>
-      <div class="star-city-conditions">
-        <img
-          class="star-weather"
-          width="48"
-          height="48"
-          src="${data.current.condition.icon}"
-          alt="${data.current.condition.text}"
-        />
-        <p class="star-city-degree">
-          ${parseInt(
-            data.current.temp_c
-          )} <span class="temperature-unit">°C</span>
-        </p>
-        <p class="star-city-condition">${data.current.condition.text}</p>
-      </div>
-    </li>`
-      )
-      .join(``);
-  }
-}
-
-const StarredWeather = new StarredWeatherCl();
-
 // function for converting 12h to 24h time
 
-const twelveHoursToTwentyFour = function (time) {
+export const twelveHoursToTwentyFour = function (time) {
   const [hours, minutes] = time.split(`:`);
   const finalTime = `${+hours === 12 ? "00" : +hours + 12}:${minutes}`;
   return finalTime;
+};
+
+const checkStarIcon = function (data, icon) {
+  const starId = starredWeather.createStarId(
+    data?.location?.name,
+    data?.location?.country,
+    data?.location?.lat,
+    data?.location?.lon
+  );
+  console.log(starId);
+  if (starredWeather.getStar(starId)) {
+    console.log(`true, fill`);
+    icon.src = `https://i.ibb.co/0y1wchP7/star-fill.png`;
+  }
+  if (!starredWeather.getStar(starId)) {
+    console.log(`false, empty`);
+
+    icon.src = `https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png`;
+  }
+};
+
+const starIconFetcher = function (data) {
+  const starIcon = document.querySelector(`.star`);
+  checkStarIcon(data, starIcon);
+  starIcon.addEventListener(`click`, () => {
+    starredWeather.saveStar(data);
+    checkStarIcon(data, starIcon);
+  });
 };
 
 //loading search results
@@ -640,23 +113,55 @@ const loadSearch = function () {
     if (searchQuery.trim().length === 0) return;
     document.querySelector(`#search-input`).value = ` `;
     currentWeather._generateSpinner();
-    forecastCl._generateSpinner();
-    await SearchWeather.getLocationData(searchQuery);
+    forecastWeather._generateSpinner();
+    const searchData = await searchWeather.getLocationData(searchQuery);
+
+    currentWeather.render(searchData);
+    forecastWeather.render(searchData);
+
+    starIconFetcher(searchData);
   });
 };
 
+const changeCurrentWeatherOnClick = async function (e) {
+  e.preventDefault();
+  let currentLoc = "";
+  if (
+    !e.target.classList.contains(`city-list-item`) &&
+    (e.target === document.querySelector(`.btn--up`) ||
+      e.target === document.querySelector(`.btn--down`))
+  )
+    return;
+
+  const location = e.target.closest(`.city-list-item`).dataset.id;
+
+  if (document.querySelector(`.city-country-location`)) {
+    {
+      console.log(`test`);
+      currentLoc = document.querySelector(`.city-country-location`).dataset
+        .cityid;
+      const renderedCurrentData = starredWeather.starred.find(
+        (data) => data.starId === location
+      );
+
+      currentWeather.render(renderedCurrentData);
+      starIconFetcher(renderedCurrentData);
+    }
+  }
+};
+
 //to initialize everything
-const starredContainer = document.querySelector(`.star-container`);
+
+const starContainer = document.querySelector(`.star-container`);
 
 const init = async function () {
-  StarredWeather.loadStarred();
-  currentWeather._generateSpinner();
-  forecastCl._generateSpinner();
-  await currentWeather.getLocationData();
-  starredContainer.addEventListener(
-    `click`,
-    StarredWeather.changeCurrentWeatherOnClick
-  );
+  starredWeather.loadStars();
+  const weatherData = await currentWeather.getLocationData();
+  currentWeather.render(weatherData);
+  forecastWeather.render(weatherData);
+  starIconFetcher(weatherData);
+  starredWeather.render(starredWeather.starred);
+  starContainer.addEventListener(`click`, changeCurrentWeatherOnClick);
   loadSearch();
 };
 
