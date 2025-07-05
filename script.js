@@ -79,14 +79,10 @@ const checkStarIcon = function (data, icon) {
     data?.location?.lat,
     data?.location?.lon
   );
-  console.log(starId);
   if (starredWeather.getStar(starId)) {
-    console.log(`true, fill`);
     icon.src = `https://i.ibb.co/0y1wchP7/star-fill.png`;
   }
   if (!starredWeather.getStar(starId)) {
-    console.log(`false, empty`);
-
     icon.src = `https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png`;
   }
 };
@@ -127,9 +123,9 @@ const changeCurrentWeatherOnClick = async function (e) {
   e.preventDefault();
   let currentLoc = "";
   if (
-    !e.target.classList.contains(`city-list-item`) &&
-    (e.target === document.querySelector(`.btn--up`) ||
-      e.target === document.querySelector(`.btn--down`))
+    !e.target.classList.contains(`city-list-item`) ||
+    e.target === document.querySelector(`.btn--up`) ||
+    e.target === document.querySelector(`.btn--down`)
   )
     return;
 
@@ -137,7 +133,6 @@ const changeCurrentWeatherOnClick = async function (e) {
 
   if (document.querySelector(`.city-country-location`)) {
     {
-      console.log(`test`);
       currentLoc = document.querySelector(`.city-country-location`).dataset
         .cityid;
       const renderedCurrentData = starredWeather.starred.find(
