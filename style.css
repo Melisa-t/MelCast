@@ -753,9 +753,7 @@ gap: 0.1rem;
 }
 
 @media (max-width: 75em) {
-  .night-mode {
-    top: 1%;
-  }
+
   .app-grid {
     gap: 3rem;
   }
@@ -870,7 +868,7 @@ gap: 0.1rem;
 
   .container {
     width: 80rem;
-    margin: 4.8rem 0;
+    margin: 6rem 0;
   }
 
   .daily-forecast {
@@ -943,7 +941,7 @@ gap: 0.1rem;
   }
 }
 
-@media (max-width: 35em) {
+/* @media (max-width: 35em) {
   .slider:before {
     bottom: 1.5px;
     font-size: 1.8rem;
@@ -993,11 +991,11 @@ gap: 0.1rem;
     width: 6rem;
     height: 6rem;
   }
-}
+} */
 
-@media (max-width: 20em) {
+@media (max-width: 35em) {
   html {
-    font-size: 35%;
+    font-size: 40%;
   }
   .slider:before {
     bottom: 0.5px;
@@ -1033,12 +1031,16 @@ gap: 0.1rem;
     transform: translateX(3.6rem);
   }
 
+  .container{
+    margin-top: 8rem;
+  }
+
   .app-grid {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   }
   .map,
-  .starred-cities {
+  .starred-cities, .forecast , .current-weather{
     grid-column: span 2;
   }
   .city-list-item {
@@ -1049,18 +1051,24 @@ gap: 0.1rem;
   }
 }
 
-@media (max-width: 18em) {
+@media (max-width: 24em) {
   html {
     font-size: 30%;
   }
   .slider:before {
-    height: 15px;
-    width: 15px;
+    height: 12.5px;
+    width: 12.5px;
     bottom: 1px;
   }
   input:checked + .slider:before {
-    -webkit-transform: translateX(3rem);
-    -ms-transform: translateX(3rem);
-    transform: translateX(3rem);
+    -webkit-transform: translateX(2.4rem);
+    -ms-transform: translateX(2.4rem);
+    transform: translateX(2.4rem);
+  }
+}
+
+@media (max-width: 20em) {
+  html {
+    font-size: 27%;
   }
 }
