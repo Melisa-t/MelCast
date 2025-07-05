@@ -1,7 +1,6 @@
 import { API_KEY, WINDY_KEY } from "../config.js";
 import { clickButtons } from "../script.js";
 import { twelveHoursToTwentyFour } from "../script.js";
-import StarredWeather from "./starredWeather.js";
 
 export default class CurrentWeather {
   _data;
@@ -78,7 +77,6 @@ export default class CurrentWeather {
       const weatherData = await fetch(
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&days=3&aqi=yes`
       );
-
       const data = await weatherData.json();
       if (!weatherData.ok) throw new Error(`${data.error.message}`);
       return data;
@@ -99,20 +97,22 @@ export default class CurrentWeather {
           return hours;
       })
       .map((hour) => {
+        const time = hour?.time.split(` `)[1] || `Null`;
+        const conditionIcon = hour?.condition?.icon || `Unknown`;
+        const temp = hour?.temp_c || 0;
+        const chanceOfRain = hour?.chance_of_rain || 0;
         return `<li class="hourly-forecast blur-border">
-                <p class="hour">${hour.time.split(` `)[1]}</p>
+                <p class="hour">${time}</p>
                 <img
-                  src="${hour.condition.icon}"
+                  src="${conditionIcon}"
                   class="hourly-img"
                   alt=""
                   class="hourly-condition"
                 />
                 <p class="hour-degree">
-                  ${parseInt(
-                    hour.temp_c
-                  )} <span class="temperature-unit">°C</span>
+                  ${parseInt(temp)} <span class="temperature-unit">°C</span>
                 </p>
-                <p class="hour-precipitation">${hour.chance_of_rain}%</p>
+                <p class="hour-precipitation">${chanceOfRain}%</p>
               </li>`;
       })
       .join(``);

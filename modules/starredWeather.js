@@ -74,8 +74,6 @@ class StarredWeather extends CurrentWeather {
   }
 
   _generateMarkUp(data) {
-    console.log(data);
-
     return data
       .map((data) => {
         const starId = data?.starId || `Unknown`;

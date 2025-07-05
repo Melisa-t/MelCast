@@ -127,6 +127,7 @@ const changeCurrentWeatherOnClick = async function (e) {
     e.target === document.querySelector(`.btn--up`) ||
     e.target === document.querySelector(`.btn--down`)
   )
+    //FIX NOT BEING ABLE TO CLICK SOMEWHERE OTHER THAN EMPTY SPACE IN LIST ITEM
     return;
 
   const location = e.target.closest(`.city-list-item`).dataset.id;
