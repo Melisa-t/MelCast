@@ -36,7 +36,6 @@ class StarredWeather extends CurrentWeather {
     this.render(this.starred);
   }
 
-
   createStarId(name, country, lat, lon) {
     if (!name || !country || !lat || !lon) return;
     const starId = this.starWeatherHash(name, country, lat, lon);
@@ -61,7 +60,6 @@ class StarredWeather extends CurrentWeather {
     });
   }
 
-
   removeStar(id) {
     const index = this.starred.findIndex((item) => item.starId === id);
     if (index > -1) {
@@ -76,31 +74,33 @@ class StarredWeather extends CurrentWeather {
   }
 
   _generateMarkUp(data) {
+    console.log(data);
+
     return data
-      .map(
-        (data) =>
-          `<li class="city-list-item blur-border" data-id="${
-            data.starId}">
-      <p class="star-title"><span>${data.location.name}</span><span>${
-            data.location.country
-          }</span></p>
+      .map((data) => {
+        const starId = data?.starId || `Unknown`;
+        const name = data?.location?.name || `Unknown`;
+        const country = data?.location?.country || `Unknown`;
+        const conditionIcon = data?.current?.condition?.icon || `Unknown`;
+        const conditionText = data?.current?.condition?.text || `Unknown`;
+        const currentTemp = data?.current?.temp_c || 0;
+       return `<li class="city-list-item blur-border" data-id="${starId}">
+      <p class="star-title"><span>${name}</span><span>${country}</span></p>
       <div class="star-city-conditions">
         <img
           class="star-weather"
           width="48"
           height="48"
-          src="${data.current.condition.icon}"
-          alt="${data.current.condition.text}"
+          src="${conditionIcon}"
+          alt="${conditionText}"
         />
         <p class="star-city-degree">
-          ${parseInt(
-            data.current.temp_c
-          )} <span class="temperature-unit">°C</span>
+          ${parseInt(currentTemp)} <span class="temperature-unit">°C</span>
         </p>
-        <p class="star-city-condition">${data.current.condition.text}</p>
+        <p class="star-city-condition">${conditionText}</p>
       </div>
-    </li>`
-      )
+    </li>`;
+      })
       .join(``);
   }
 }
