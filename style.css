@@ -621,6 +621,12 @@ input:checked + .slider:before {
   align-items: center;
 }
 
+.error-msg{
+  font-weight: bold;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
 .forecast-wind-condition p,
 .forecast-minmax p,
 .forecast-precipitation-condition p,
