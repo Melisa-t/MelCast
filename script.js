@@ -96,6 +96,14 @@ const starIconFetcher = function (data) {
   });
 };
 
+const renderErrorMessage = function (errorMessage) {
+  forecastWeather.parentEl.innerHTML = ` `;
+  currentWeather.parentEl.innerHTML = ` `;
+  currentWeather.parentEl.innerHTML = `<p class="err-text">${errorMessage}</p>`;
+  forecastWeather.parentEl.innerHTML = `<p class="err-text">${errorMessage}</p>`;
+  currentWeather.parentEl.style.height = `530px`;
+};
+
 //loading search results
 
 const loadSearch = function () {
@@ -118,11 +126,7 @@ const loadSearch = function () {
 
       starIconFetcher(searchData);
     } catch (err) {
-      forecastWeather.parentEl.innerHTML = ` `;
-      currentWeather.parentEl.innerHTML = ` `;
-      currentWeather.parentEl.innerHTML = `<p class="err-text">${err.message}</p>`;
-      forecastWeather.parentEl.innerHTML = `<p class="err-text">${err.message}</p>`;
-      currentWeather.parentEl.style.height = `530px`;
+      renderErrorMessage(err.message);
     }
   });
 };
@@ -165,14 +169,18 @@ const changeCurrentWeatherOnClick = async function (e) {
 const starContainer = document.querySelector(`.star-container`);
 
 const init = async function () {
-  starredWeather.loadStars();
-  const weatherData = await currentWeather.getLocationData();
-  currentWeather.render(weatherData);
-  forecastWeather.render(weatherData);
-  starIconFetcher(weatherData);
-  starredWeather.render(starredWeather.starred);
-  starContainer.addEventListener(`click`, changeCurrentWeatherOnClick);
-  loadSearch();
+  try {
+    starredWeather.loadStars();
+    const weatherData = await currentWeather.getLocationData();
+    currentWeather.render(weatherData);
+    forecastWeather.render(weatherData);
+    starIconFetcher(weatherData);
+    starredWeather.render(starredWeather.starred);
+    starContainer.addEventListener(`click`, changeCurrentWeatherOnClick);
+    loadSearch();
+  } catch (err) {
+    renderErrorMessage(err.message);
+  }
 };
 
 init();

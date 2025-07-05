@@ -81,11 +81,7 @@ export default class CurrentWeather {
       if (!weatherData.ok) throw new Error(`${data.error.message}`);
       return data;
     } catch (err) {
-      //FIX ERROR HANDLING!!!
-      this._clear();
-      this.parentEl.innerHTML = `<p class="err-text">${err.message}</p>`;
-      //   forecastWeather.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      this.parentEl.style.height = `530px`;
+      throw new Error(`${err.message}`);
     }
   }
 

@@ -6,12 +6,23 @@ class StarredWeather extends CurrentWeather {
   parentEl = document.querySelector(`.city-list`);
   markUp;
   starred = [];
+  errorMsg = `<p class="error-msg"> No starred locations found. Star some! </p>`;
 
-  render() {
-    this._clear();
-    this.markUp = this._generateMarkUp(this.starred);
+  render(data) {
+    if (!data) return;
+    this._clear(data, this.errorMsg);
+    this.markUp = this._generateMarkUp(data);
     this.parentEl.insertAdjacentHTML(`beforeend`, this.markUp);
     clickButtons();
+  }
+
+  _clear(data, errMsg) {
+    if (data.length === 0) {
+      this.parentEl.innerHTML = ` `;
+      this.parentEl.insertAdjacentHTML(`beforeend`, errMsg);
+    } else {
+      this.parentEl.innerHTML = ` `;
+    }
   }
 
   // every single time star icon is clicked save data in local storage
@@ -82,7 +93,7 @@ class StarredWeather extends CurrentWeather {
         const conditionIcon = data?.current?.condition?.icon || `Unknown`;
         const conditionText = data?.current?.condition?.text || `Unknown`;
         const currentTemp = data?.current?.temp_c || 0;
-       return `<li class="city-list-item blur-border" data-id="${starId}">
+        return `<li class="city-list-item blur-border" data-id="${starId}">
       <p class="star-title"><span>${name}</span><span>${country}</span></p>
       <div class="star-city-conditions">
         <img
@@ -104,117 +115,3 @@ class StarredWeather extends CurrentWeather {
 }
 
 export default new StarredWeather();
-
-//   render(data) {
-//     this._pushStarLocation(data);
-//     clickButtons();
-//   }
-
-//   _pushStarLocation(data) {
-//     console.log(`data yo`, data);
-//     if (!this.starred) return;
-//     const isStarred = this.starred.some((loc) => {
-//       console.log(`loc yo`, loc);
-//       loc.location.name === data.location.name &&
-//         loc.location.country === data.location.country;
-//     });
-
-//     // Initial icon setup
-//     starIcon.src = isStarred
-//       ? "https://i.ibb.co/0y1wchP7/star-fill.png"
-//       : "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
-//     const index = this.starred.findIndex(
-//       (loc) =>
-//         loc.location.name === data.location.name &&
-//         loc.location.country === data.location.country
-//     );
-
-//     if (index > -1) {
-//       // Unstar
-//       this.starred.splice(index, 1);
-//       this.keepStarred();
-//       // Remove city from markup
-//       const cityItems = document.querySelectorAll(".city-list-item");
-//       cityItems.forEach((item) => {
-//         if (
-//           item.textContent.includes(data.location.name) &&
-//           item.textContent.includes(data.location.country)
-//         ) {
-//           item.remove();
-//         }
-//       });
-//       starIcon.src = "https://i.ibb.co/tPT5JxHP/icons8-star-50-1.png";
-//       this.loadStarred();
-//     } else {
-//       // Star
-//       this.starred.push(data);
-//       data.bookmarked = true;
-//       this.renderStarredLocation(data);
-//       this.keepStarred();
-//       starIcon.src = "https://i.ibb.co/0y1wchP7/star-fill.png";
-//     }
-//   }
-
-//   async _getLocationData(currentLoc, location) {
-//     if (currentLoc === location) return;
-//     const weatherData = await fetch(
-//       `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
-//     );
-//     const data = await weatherData.json();
-//     return data;
-//   }
-
-//   changeCurrentWeatherOnClick(e) {
-//     e.preventDefault();
-//     let currentLoc = "";
-//     if (
-//       !e.target.classList.contains(`city-list`) &&
-//       (e.target === document.querySelector(`.btn--up`) ||
-//         e.target === document.querySelector(`.btn--down`))
-//     )
-//       return;
-
-//     const location = e.target.closest(`.city-list-item`).dataset.location;
-//     if (!document.querySelector(`.city-country-location`))
-//       this.render(this._getLocationData(currentLoc, location));
-
-//     if (document.querySelector(`.city-country-location`)) {
-//       currentLoc = document.querySelector(`.city-country-location`).dataset
-//         .currentLocation;
-//       this.render(this._getLocationData(currentLoc, location));
-//     }
-//   }
-
-//   loadStarred() {
-//     let data = localStorage.getItem("starred");
-//     console.log(this.starred);
-//     console.log(data);
-//     if (data) {
-//       this.starred = JSON.parse(data);
-//       this.starred.forEach((location) => {
-//         this.renderStarredLocation(location);
-//       });
-//     }
-//     if (this.starred.length === 0) {
-//       const markup = `<p class="star-text">No starred cities found! </p>
-// `;
-//       this.parentEl.insertAdjacentHTML("afterbegin", markup);
-//     }
-//   }
-
-//   renderStarredLocation(data) {
-//     const exists = [...this.parentEl.querySelectorAll(".city-list-item")].some(
-//       (el, i) => {
-//         el.textContent.includes(data.location.name);
-//       }
-//     );
-//     if (exists) return;
-//     this._clear();
-//     const markup = this._generateMarkUp(this.starred);
-//     this.parentEl.insertAdjacentHTML("beforeend", markup);
-//     starIconFetcher(data);
-//   }
-
-//   keepStarred() {
-//     localStorage.setItem("starred", JSON.stringify(this.starred));
-//   }
