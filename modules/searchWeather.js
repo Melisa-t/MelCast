@@ -13,13 +13,16 @@ class SearchWeather extends CurrentWeather {
     this._localDate = localDate;
     this._data = data;
     this._clear();
-    
+
     clickButtons();
+  }
+
+  _clear() {
+    this.parentEl.innerHTML = ` `;
   }
 
   async getLocationData(query) {
     try {
-
       if (!query || query.trim().length === 0) return;
       const weatherData = await fetch(
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=yes`
@@ -27,11 +30,8 @@ class SearchWeather extends CurrentWeather {
       const data = await weatherData.json();
       if (!weatherData.ok) throw new Error(`${data.error.message}`);
       return data;
-    } catch (err) {
-      this._clear();
-      this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      //   forecastWeather.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
-      this.parentEl.style.height = `530px`;
+    } catch (err) { throw new Error (`${err.message}`)
+
     }
   }
 }

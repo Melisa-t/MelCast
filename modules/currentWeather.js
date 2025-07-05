@@ -9,7 +9,6 @@ export default class CurrentWeather {
   _localDate;
 
   render(data) {
-    currentWeather._generateSpinner();
     const localDate = new Date(data.location.localtime);
     this._localDate = localDate;
     this.forecastHourArranger(this._data);
@@ -81,8 +80,9 @@ export default class CurrentWeather {
       if (!weatherData.ok) throw new Error(`${data.error.message}`);
       return data;
     } catch (err) {
+        //FIX ERROR HANDLING!!!
       this._clear();
-      this.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
+      this.parentEl.innerHTML = `<p class="err-text">${err.message}</p>`;
       //   forecastWeather.parentEl.innerHTML = `<p class="err-text">${err}</p>`;
       this.parentEl.style.height = `530px`;
     }

@@ -8,7 +8,6 @@ class Forecast extends CurrentWeather {
   _localDate;
 
   render(data) {
-    this._generateSpinner();
     this._clear();
     this._data = data;
     const localDate = new Date(data.location.localtime);

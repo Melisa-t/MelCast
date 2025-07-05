@@ -110,12 +110,20 @@ const loadSearch = function () {
     document.querySelector(`#search-input`).value = ` `;
     currentWeather._generateSpinner();
     forecastWeather._generateSpinner();
-    const searchData = await searchWeather.getLocationData(searchQuery);
+    try {
+      const searchData = await searchWeather.getLocationData(searchQuery);
 
-    currentWeather.render(searchData);
-    forecastWeather.render(searchData);
+      currentWeather.render(searchData);
+      forecastWeather.render(searchData);
 
-    starIconFetcher(searchData);
+      starIconFetcher(searchData);
+    } catch (err) {
+      forecastWeather.parentEl.innerHTML = ` `;
+      currentWeather.parentEl.innerHTML = ` `;
+      currentWeather.parentEl.innerHTML = `<p class="err-text">${err.message}</p>`;
+      forecastWeather.parentEl.innerHTML = `<p class="err-text">${err.message}</p>`;
+      currentWeather.parentEl.style.height = `530px`;
+    }
   });
 };
 
