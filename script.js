@@ -131,14 +131,13 @@ const changeCurrentWeatherOnClick = async function (e) {
   e.preventDefault();
   let currentLoc = "";
   if (
-    !e.target.classList.contains(`city-list-item`) ||
+    !e.currentTarget === starContainer ||
     e.target === document.querySelector(`.btn--up`) ||
     e.target === document.querySelector(`.btn--down`)
   )
-    //FIX NOT BEING ABLE TO CLICK SOMEWHERE OTHER THAN EMPTY SPACE IN LIST ITEM
     return;
-  console.log(e.target);
-  const location = e.target.closest(`.city-list-item`).dataset.id;
+
+  const location = e.target.closest(`.city-list-item`)?.dataset?.id;
   if (document.querySelector(`.city-country-location`)) {
     {
       currentLoc = document.querySelector(`.city-country-location`).dataset
@@ -147,15 +146,16 @@ const changeCurrentWeatherOnClick = async function (e) {
         (data) => data.starId === location
       );
       currentWeather.render(renderedCurrentData);
+      forecastWeather.render(renderedCurrentData);
       starIconFetcher(renderedCurrentData);
     }
   }
   if (!document.querySelector(`.city-country-location`)) {
-
     const renderedCurrentData = starredWeather.starred.find(
       (data) => data.starId === location
     );
     currentWeather.render(renderedCurrentData);
+    forecastWeather.render(renderedCurrentData);
     starIconFetcher(renderedCurrentData);
   }
 };

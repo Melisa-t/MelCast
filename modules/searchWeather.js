@@ -9,6 +9,7 @@ class SearchWeather extends CurrentWeather {
   markUp;
 
   render(data) {
+    if (!data) return;
     const localDate = new Date(data.location.localtime);
     this._localDate = localDate;
     this._data = data;
