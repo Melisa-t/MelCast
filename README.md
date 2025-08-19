@@ -26,3 +26,20 @@ Changing the city changes the temperature map.
 Weather until 5 AM is displayed on the hourly forecast tab.
 ![Screenshot from Melcast](./img/melcast6.png)
 
+### Responsive Design 
+For large and medium laptops
+![Screenshot from Melcast](./img/responsive1.png)
+For medium laptops 
+![Screenshot from Melcast](./img/responsive2.png)
+For small laptops
+![Screenshot from Melcast](./img/responsive3.png)
+For large and medium tablets
+![Screenshot from Melcast](./img/responsive4.png)
+For smaller tablets
+![Screenshot from Melcast](./img/responsive5.png)
+One column design for smaller tablets 
+![Screenshot from Melcast](./img/responsive6.png)
+For medium phones
+![Screenshot from Melcast](./img/responsive7.png)
+For small phones
+![Screenshot from Melcast](./img/responsive8.png)
