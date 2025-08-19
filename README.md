@@ -1,6 +1,7 @@
 # MelCast
 -	Created the project plan, wrote down user stories accordingly, as well as in-scope and out-of-scope features.
 -	Design done using Figma, implemented with HTML and CSS. Refined some features during implementation to improve User Experience.
+- Implemented responsive design using CSS media queries.
 -	Added functionality with vanilla JavaScript using AJAX calls, classes/modules, DOM manipulation. 
 -	Applied ES6 classes and modules to abide by separation of concerns and SOLID principles.
 -	Integrated Open Weather API to fetch data.
