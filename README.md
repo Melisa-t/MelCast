@@ -22,8 +22,6 @@ Simple, responsive weather app built with **vanilla JavaScript**, **HTML**, and 
 
 ### UI Preview
 
-> A few screenshots from the app to give you the vibe:
-
 - **Day Mode** – main dashboard with current conditions and quick actions.  
 - **Empty Search State** – clear guidance when no locations are found.  
 - **Starred City** – a saved city highlighted for one-tap access.  
