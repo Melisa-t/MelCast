@@ -904,7 +904,7 @@ input:checked + .slider:before {
     transform: translateX(2rem);
   }
 
-    .slider:before {
+  .slider:before {
     bottom: 1px;
     font-size: 1.6rem;
   }
