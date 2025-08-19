@@ -1,13 +1,56 @@
 # MelCast
--	Created the project plan, wrote down user stories accordingly, as well as in-scope and out-of-scope features.
--	Design done using Figma, implemented with HTML and CSS. Refined some features during implementation to improve User Experience.
-- Implemented responsive design using CSS media queries.
--	Added functionality with vanilla JavaScript using AJAX calls, classes/modules, DOM manipulation. 
--	Applied ES6 classes and modules to abide by separation of concerns and SOLID principles.
--	Integrated Open Weather API to fetch data.
--	Manipulated DOM to render UI for forecast, and starred locations and weather map accordingly to the data fetched.
--	Implemented local storage to keep starred locations and UI night/day mode of choice.
--	Enhanced User Experience with error handling, and spinners.
+
+Simple, responsive weather app built with **vanilla JavaScript**, **HTML**, and **CSS**. Fetches live conditions and forecasts from the OpenWeather API and presents them in a clean, mobile-first UI.
+
+---
+
+## Features
+
+> **Live Weather Fetching** – Retrieves current conditions and multi-hour forecast via OpenWeather API using asynchronous requests (AJAX/fetch) and renders them dynamically in the UI.  
+
+> **Starred Locations** – Quickly save favorite cities. Selections persist across sessions using `localStorage` for a fast, personalized experience.  
+
+> **Day/Night Mode** – Remembers your theme preference (and respects the system preference) to keep the interface readable at all times.  
+
+> **Interactive Weather Map** – Temperature map updates when you change city, providing a quick visual overview.  
+
+> **Error Handling & UX Polish** – Loading spinners and graceful fallbacks make network hiccups and empty searches feel smooth instead of jarring.  
+
+> **Modular ES6 Codebase** – Uses ES6 classes/modules and separation of concerns to keep the codebase tidy and maintainable.  
+
+---
+
+### UI Preview
+
+> A few screenshots from the app to give you the vibe:
+
+- **Day Mode** – main dashboard with current conditions and quick actions.  
+- **Empty Search State** – clear guidance when no locations are found.  
+- **Starred City** – a saved city highlighted for one-tap access.  
+- **Temperature Map** – map tiles update as you switch locations.  
+- **Hourly Forecast** – timeline of conditions up to early morning.  
+
+(See below for the  screenshots.)
+
+---
+
+## Tech Stack
+
+- **Frontend:** HTML5, CSS3 (responsive with media queries), Vanilla JS (ES6)  
+- **APIs:** OpenWeather (forecast & current conditions)  
+- **Storage:** `localStorage` for theme + favorites  
+
+---
+
+
+## Project Notes
+
+- Built from a Figma design and refined during implementation for UX improvements.  
+- Layout adapts across phones, tablets, and laptops via responsive CSS.  
+- Designed with maintainability in mind (SOLID-ish separation across modules).  
+
+---
+
 
 ### Figma Design
 ![Screenshot of Figma design](./img/melcast-figma.png)
