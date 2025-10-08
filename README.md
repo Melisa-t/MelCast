@@ -1,12 +1,12 @@
 # MelCast
 
-Simple, responsive weather app built with **vanilla JavaScript**, **HTML**, and **CSS**. Fetches live conditions and forecasts from the OpenWeather API and presents them in a clean, mobile-first UI.
+Simple, responsive weather app built with **vanilla JavaScript**, **HTML**, and **CSS**. Fetches live conditions and forecasts from the Weather API and presents them in a clean, mobile-first UI.
 
 ---
 
 ## Features
 
-> **Live Weather Fetching** – Retrieves current conditions and multi-hour forecast via OpenWeather API using asynchronous requests (AJAX/fetch) and renders them dynamically in the UI.  
+> **Live Weather Fetching** – Retrieves current conditions and multi-hour forecast via Weather API using asynchronous requests (AJAX/fetch) and renders them dynamically in the UI.  
 
 > **Starred Locations** – Quickly save favorite cities. Selections persist across sessions using `localStorage` for a fast, personalized experience.  
 
@@ -35,7 +35,7 @@ Simple, responsive weather app built with **vanilla JavaScript**, **HTML**, and 
 ## Tech Stack
 
 - **Frontend:** HTML5, CSS3 (responsive with media queries), Vanilla JS (ES6)  
-- **APIs:** OpenWeather (forecast & current conditions)  
+- **APIs:** Weather (forecast & current conditions)  
 - **Storage:** `localStorage` for theme + favorites  
 
 ---
